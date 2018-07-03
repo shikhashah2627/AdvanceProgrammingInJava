@@ -31,16 +31,14 @@ public class PhoneCallTest {
   @Test(expected = UnsupportedOperationException.class)
   public void checkSyntaxForPhoneNumber() {
       String phone_number = "123-345-789";
-      Project1 call = new Project1();
-      call.number_format_check(phone_number);
+      Project1.number_format_check(phone_number);
 
     }
 
   @Test(expected = UnsupportedOperationException.class)
   public void checkSyntaxForCustomerName() {
       String name = "shikha $hah";
-      Project1 call = new Project1();
-      call.name_check(name);
+      Project1.name_check(name);
   }
 
   }

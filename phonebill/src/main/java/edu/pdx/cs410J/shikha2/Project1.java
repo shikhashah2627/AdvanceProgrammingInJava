@@ -8,7 +8,7 @@ public class Project1 {
     /**
      * @param name
      */
-    public void name_check(String name) {
+    public static void name_check(String name) {
         String pattern = "([a-z] ?)+[a-z]";
         if (name.matches(pattern)) {
             System.out.println("You have entered correct syntax name");
@@ -20,7 +20,7 @@ public class Project1 {
     /**
      * @param number
      */
-    public void number_format_check(String number) {
+    public static void number_format_check(String number) {
         String pattern1 = "^\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d";
         if (number.matches(pattern1)) {
             System.out.println("You have entered correct syntax of phone number ");
@@ -30,12 +30,24 @@ public class Project1 {
   }
 
     /**
-     * @param date_time
+     * @param date
      */
-    public void check_date_format(String date_time) {
-        String dateTimeFormat = "([0-9]{1,2})/([0-9]{1,2})/([0-9]{4}) " +
-                "([0-9]{1,2}):([0-9]{1,2})";
-        if (date_time.matches(dateTimeFormat)) {
+    public static void check_date_format(String date) {
+        String dateTimeFormat = "([0-9]{1,2})/([0-9]{1,2})/([0-9]{4})";
+        if (date.matches(dateTimeFormat)) {
+            System.out.println("You have entered correct Time");
+        } else {
+            throw new UnsupportedOperationException("Please enter proper time");
+        }
+    }
+
+
+    /**
+     * @param time is passed as one of the command line argument.
+     */
+    public static void check_time_format(String time) {
+        String time_format = "([0-9]{1,2}):([0-9]{1,2})";
+        if (time.matches(time_format)) {
             System.out.println("You have entered correct Time");
         } else {
             throw new UnsupportedOperationException("Please enter proper time");
@@ -48,28 +60,35 @@ public class Project1 {
 
     public static void main(String[] args) {
         PhoneCall call = new PhoneCall();  // Refer to one of Dave's classes so that we can be sure it is on the classpath
-        String name, caller_number, callee_number, start_time, end_time;
-        name = caller_number = callee_number = start_time = end_time = null;
+        String name, caller_number, callee_number, start_date, start_time, end_date, end_time;
+        name = caller_number = callee_number = start_date = start_time = end_date = end_time = null;
         PhoneBill bill = new PhoneBill(); // refers to phone bill class's object.
         bill.addPhoneCall(call);
         Project1 pro_obj = new Project1();
         for (String arg : args) {
             if (name == null) {
                 name = arg;
-                pro_obj.name_check(name);
+                name_check(name);
             } else if (caller_number == null) {
                 caller_number = arg;
-                pro_obj.number_format_check(caller_number);
+                number_format_check(caller_number);
             } else if (callee_number == null) {
                 callee_number = arg;
-                pro_obj.number_format_check(callee_number);
+                number_format_check(callee_number);
+            } else if (start_date == null) {
+                start_date = arg;
+                check_date_format(start_date);
             } else if (start_time == null) {
                 start_time = arg;
-                pro_obj.check_date_format(start_time);
+                check_time_format(start_time);
+            } else if (end_date == null) {
+                end_date = arg;
+                check_date_format(end_date);
             } else if (end_time == null) {
                 end_time = arg;
-                pro_obj.check_date_format(end_time);
+                check_time_format(end_time);
             }
+
             System.out.println(arg);
         }
 

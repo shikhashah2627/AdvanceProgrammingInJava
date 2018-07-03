@@ -37,10 +37,9 @@ public class Project1IT extends InvokeMainTestCase {
         assertThat(result.getTextWrittenToStandardError(), containsString("Missing caller_number"));
     }
 
-    @Ignore
     @Test
     public void invokeMainWithAllCallerInformation() {
-        MainMethodResult result = invokeMain(Project1.class, "shikha shah", "503-473-4347", "123-456-7890", "1/2/3123 1:2", "1/2/3123 1:2");
+        MainMethodResult result = invokeMain(Project1.class, "shikha shah", "503-473-4347", "123-456-7890", "1/2/3123", "1:2", "1/2/3123", "1:2");
         assertThat(result.getTextWrittenToStandardOut(), containsString(""));
     }
 
