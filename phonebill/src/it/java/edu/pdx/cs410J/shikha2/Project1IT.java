@@ -1,6 +1,7 @@
 package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.InvokeMainTestCase;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -28,5 +29,19 @@ public class Project1IT extends InvokeMainTestCase {
     assertThat(result.getExitCode(), equalTo(1));
     assertThat(result.getTextWrittenToStandardError(), containsString("Missing command line arguments"));
   }
+
+    @Test
+    public void checkMissingCallerNumber() {
+        MainMethodResult result = invokeMain(Project1.class, "xyz");
+        assertThat(result.getExitCode(), equalTo(1));
+        assertThat(result.getTextWrittenToStandardError(), containsString("Missing caller_number"));
+    }
+
+    @Ignore
+    @Test
+    public void invokeMainWithAllCallerInformation() {
+        MainMethodResult result = invokeMain(Project1.class, "shikha shah", "503-473-4347", "123-456-7890", "1/2/3123 1:2", "1/2/3123 1:2");
+        assertThat(result.getTextWrittenToStandardOut(), containsString(""));
+    }
 
 }

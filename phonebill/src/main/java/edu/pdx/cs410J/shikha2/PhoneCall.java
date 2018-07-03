@@ -3,24 +3,32 @@ package edu.pdx.cs410J.shikha2;
 import edu.pdx.cs410J.AbstractPhoneCall;
 
 public class PhoneCall extends AbstractPhoneCall {
-  @Override
-  public String getCaller() {
-    throw new UnsupportedOperationException("This method is not implemented yet");
-  }
+    String Caller_number = null;
+    String Callee_number = null;
+    String getStartTime = null;
+    String getEndTime = null;
 
-  @Override
+    /**
+     * @return It returns the caller number
+     */
+    @Override
+    public String getCaller() {
+        return Caller_number;
+    }
+
+    @Override
   public String getCallee() {
-    return "This method is not implemented yet";
-  }
+        return Callee_number;
+    }
 
-  @Override
+    @Override
   public String getStartTimeString() {
-    throw new UnsupportedOperationException("This method is not implemented yet");
-  }
+        return getStartTime;
+    }
 
-  @Override
+    @Override
   public String getEndTimeString() {
-    throw new UnsupportedOperationException("This method is not implemented yet");
-  }
+        return getEndTime;
+    }
 }
 

@@ -30,17 +30,18 @@ public class PhoneCallTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void checkSyntaxForPhoneNumber() {
-    String phone_number = "123-345-7893";
-    Project1 call = new Project1("??",phone_number,"??");
+      String phone_number = "123-345-789";
+      Project1 call = new Project1();
+      call.number_format_check(phone_number);
 
     }
 
   @Test(expected = UnsupportedOperationException.class)
   public void checkSyntaxForCustomerName() {
-    String name = "shikha shah";
-    String phone_number = "123-345-7893";
-    String Time="1/2/3";
-    Project1 call = new Project1(name,phone_number,Time);
+      String name = "shikha $hah";
+      Project1 call = new Project1();
+      call.name_check(name);
   }
+
   }
 
