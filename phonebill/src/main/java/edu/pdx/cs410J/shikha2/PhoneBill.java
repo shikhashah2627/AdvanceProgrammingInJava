@@ -1,16 +1,26 @@
 package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
-import edu.pdx.cs410J.AbstractPhoneCall;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
+
+    String Customer;
+
+    public PhoneBill(String customer) {
+        Customer = customer;
+    }
+
     private  Collection<PhoneCall> calls = new ArrayList<>();
+
+    /**
+     * @return Customer name is returned.
+     */
     @Override
     public String getCustomer() {
-        return null;
+        return Customer;
     }
 
     @Override

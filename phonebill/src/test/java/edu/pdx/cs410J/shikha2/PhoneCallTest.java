@@ -12,19 +12,19 @@ public class PhoneCallTest {
 
   @Test (expected = UnsupportedOperationException.class)
   public void getStartTimeStringNeedsToBeImplemented() {
-    PhoneCall call = new PhoneCall();
+    PhoneCall call = new PhoneCall("??", "??", "??", "??", "??", "??");
     call.getStartTimeString();
   }
 
   @Test
   public void initiallyAllPhoneCallsHaveTheSameCallee() {
-    PhoneCall call = new PhoneCall();
+    PhoneCall call = new PhoneCall("??", "??", "??", "??", "??", "??");
     assertThat(call.getCallee(), containsString("not implemented"));
   }
 
   @Test
   public void forProject1ItIsOkayIfGetStartTimeReturnsNull() {
-    PhoneCall call = new PhoneCall();
+    PhoneCall call = new PhoneCall("??", "??", "??", "??", "??", "??");
     assertThat(call.getStartTime(), is(nullValue()));
   }
 

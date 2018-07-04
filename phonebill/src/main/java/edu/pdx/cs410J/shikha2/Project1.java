@@ -74,13 +74,9 @@ public class Project1 {
      */
 
     public static void main(String[] args) {
-        PhoneCall call = new PhoneCall();  // Refer to one of Dave's classes so that we can be sure it is on the classpath
 
         String name, caller_number, callee_number, start_date, start_time, end_date, end_time;
         name = caller_number = callee_number = start_date = start_time = end_date = end_time = null;
-
-        PhoneBill bill = new PhoneBill(); // refers to phone bill class's object
-        bill.addPhoneCall(call);
 
         for (String arg : args) {
             if (name == null) {
@@ -89,11 +85,9 @@ public class Project1 {
             } else if (caller_number == null) {
                 caller_number = arg;
                 number_format_check(caller_number);
-                call.setCaller_number(caller_number);
             } else if (callee_number == null) {
                 callee_number = arg;
                 number_format_check(callee_number);
-                call.setCallee_number(callee_number);
             } else if (start_date == null) {
                 start_date = arg;
                 check_date_format(start_date);
@@ -123,6 +117,9 @@ public class Project1 {
             printErrorMessageAndExit("Missing end_time argument");
         }
 
+        PhoneCall call = new PhoneCall(caller_number, callee_number, start_date, start_time, end_date, end_time);
+        // Refer to one of Dave's classes so that we can be sure it is on the classpath
+        PhoneBill bill = new PhoneBill(name); // refers to phone bill class's constructor that has an argument as customer name.
 
     }
 
