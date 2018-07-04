@@ -8,6 +8,22 @@ public class PhoneCall extends AbstractPhoneCall {
     String getStartTime = null;
     String getEndTime = null;
 
+    public void setCaller_number(String caller_number) {
+        this.Caller_number = caller_number;
+    }
+
+    public void setCallee_number(String callee_number) {
+        this.Callee_number = callee_number;
+    }
+
+    public void setGetStartTime(String getStartTime) {
+        this.getStartTime = getStartTime;
+    }
+
+    public void setGetEndTime(String getEndTime) {
+        this.getEndTime = getEndTime;
+    }
+
     /**
      * @return It returns the caller number
      */
