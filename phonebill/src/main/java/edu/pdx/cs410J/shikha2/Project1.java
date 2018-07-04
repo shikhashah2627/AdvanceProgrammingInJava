@@ -11,12 +11,14 @@ public class Project1 {
      * @param name
      *          caller name
      */
-    public static void name_check(String name) {
+    public static void name_check(String name) throws UnsupportedOperationException {
         String pattern = "([a-z] ?)+[a-z]";
-        if (name.matches(pattern)) {
-            System.out.println("You have entered correct syntax name");
-        } else {
-            throw new UnsupportedOperationException("Name should not have special characters!");
+        try {
+            if (name.matches(pattern)) {
+            } else throw new UnsupportedOperationException();
+        } catch (UnsupportedOperationException ex) {
+            System.out.println("Name should not have special characters!");
+            System.exit(0);
         }
     }
 
@@ -26,14 +28,16 @@ public class Project1 {
      * @param phone_number
      *         caller number and callee number
      */
-    public static void number_format_check(String phone_number) {
+    public static void number_format_check(String phone_number) throws UnsupportedOperationException {
         String pattern1 = "^\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d";
-        if (phone_number.matches(pattern1)) {
-            System.out.println("You have entered correct syntax of phone number ");
-        } else {
-            throw new UnsupportedOperationException("Phone number should be of format XXX-XXX-XXXX");
+        try {
+            if (phone_number.matches(pattern1)) {
+            } else throw new UnsupportedOperationException();
+        } catch (UnsupportedOperationException ex) {
+            System.out.println("Valid Phone Number format is XXX-XXX-XXXX");
+            System.exit(0);
         }
-  }
+    }
 
     /**
      * <code>check_date_format</code>
@@ -42,11 +46,15 @@ public class Project1 {
      *         start date and end date
      */
     public static void check_date_format(String date) {
-        String dateTimeFormat = "([0-9]{1,2})/([0-9]{1,2})/([0-9]{4})";
-        if (date.matches(dateTimeFormat)) {
-            System.out.println("You have entered correct Time");
-        } else {
-            throw new UnsupportedOperationException("Please enter proper time");
+        String dateTimeFormat = "([0-9]{1,2})/([0-9]{1,2})/\\d{4}";
+        try {
+            if (date.matches(dateTimeFormat)) {
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        } catch (UnsupportedOperationException ex) {
+            System.out.println("Please enter proper date");
+            System.exit(0);
         }
     }
 
@@ -59,10 +67,12 @@ public class Project1 {
      */
     public static void check_time_format(String time) {
         String time_format = "([0-9]{1,2}):([0-9]{1,2})";
-        if (time.matches(time_format)) {
-            System.out.println("You have entered correct Time");
-        } else {
-            throw new UnsupportedOperationException("Please enter proper time");
+        try {
+            if (time.matches(time_format)) {
+            } else throw new UnsupportedOperationException();
+        } catch (UnsupportedOperationException ex) {
+            System.out.println("Please enter proper time");
+            System.exit(0);
         }
     }
 
@@ -79,6 +89,15 @@ public class Project1 {
         name = caller_number = callee_number = start_date = start_time = end_date = end_time = null;
 
         for (String arg : args) {
+
+            if (arg.matches("-README")) {
+                System.out.println("Author : Shikha Shah");
+                System.exit(0);
+            }
+
+            if (arg.matches("-print")) {
+                continue;
+            }
             if (name == null) {
                 name = arg;
                 name_check(name);
@@ -101,8 +120,7 @@ public class Project1 {
                 end_time = arg;
                 check_time_format(end_time);
             }
-
-            System.out.println(arg);
+            //System.out.println(arg);
         }
 
         if (name == null) {
@@ -120,6 +138,11 @@ public class Project1 {
         PhoneCall call = new PhoneCall(caller_number, callee_number, start_date, start_time, end_date, end_time);
         // Refer to one of Dave's classes so that we can be sure it is on the classpath
         PhoneBill bill = new PhoneBill(name); // refers to phone bill class's constructor that has an argument as customer name.
+
+
+        if (args[0].matches("-print") || args[1].matches("-print")) {
+            System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + call.toString());
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.shikha2;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -10,18 +11,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class PhoneCallTest {
 
-  @Test (expected = UnsupportedOperationException.class)
+  @Test //(expected = UnsupportedOperationException.class)
   public void getStartTimeStringNeedsToBeImplemented() {
     PhoneCall call = new PhoneCall("??", "??", "??", "??", "??", "??");
-    call.getStartTimeString();
+    assertThat(call.getStartTimeString(), containsString("??"));
   }
 
   @Test
   public void initiallyAllPhoneCallsHaveTheSameCallee() {
     PhoneCall call = new PhoneCall("??", "??", "??", "??", "??", "??");
-    assertThat(call.getCallee(), containsString("not implemented"));
+    assertThat(call.getCallee(), containsString("??"));
   }
 
+  @Ignore
   @Test
   public void forProject1ItIsOkayIfGetStartTimeReturnsNull() {
     PhoneCall call = new PhoneCall("??", "??", "??", "??", "??", "??");
