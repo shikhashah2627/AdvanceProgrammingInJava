@@ -6,6 +6,7 @@ package edu.pdx.cs410J.shikha2;
 public class Project1 {
 
     /**
+     * This method helps to check customer name
      * @param name
      */
     public static void name_check(String name) {
@@ -18,6 +19,7 @@ public class Project1 {
     }
 
     /**
+     * This method helps to check caller number and callee number whether it is XXX-XXX-XXXX
      * @param number
      */
     public static void number_format_check(String number) {
@@ -30,6 +32,7 @@ public class Project1 {
   }
 
     /**
+     * This method helps to check the start data and end date entered in the format of mm/dd/yyyy
      * @param date
      */
     public static void check_date_format(String date) {
@@ -43,7 +46,8 @@ public class Project1 {
 
 
     /**
-     * @param time is passed as one of the command line argument.
+     * This method checks the time syntax of the entered start and end time in the format of hh:mm
+     * @param time
      */
     public static void check_time_format(String time) {
         String time_format = "([0-9]{1,2}):([0-9]{1,2})";
