@@ -11,8 +11,12 @@ public class Project1 {
      * @param name
      *          caller name
      */
+    static final String README = "Author for Project 1: PhoneCall Project is : Shikha Shah" +
+            "This project takes the command line argument of customer name , phone number of caller and callee and date and time from start to end" +
+            "You can also print the the args by specifying -print option before passing the argument";
+
     public static void name_check(String name) throws UnsupportedOperationException {
-        String pattern = "([a-z] ?)+[a-z]";
+        String pattern = "([a-zA-Z0-9] ?)+[a-zA-Z0-9]";
         try {
             if (name.matches(pattern)) {
             } else throw new UnsupportedOperationException();
@@ -88,10 +92,15 @@ public class Project1 {
         String name, caller_number, callee_number, start_date, start_time, end_date, end_time;
         name = caller_number = callee_number = start_date = start_time = end_date = end_time = null;
 
+        if (args.length == 0) {
+            System.err.println("Missing command line arguments");
+            System.exit(1);
+        }
+
         for (String arg : args) {
 
             if (arg.matches("-README")) {
-                System.out.println("Author : Shikha Shah");
+                System.out.println(README);
                 System.exit(0);
             }
 
@@ -143,6 +152,8 @@ public class Project1 {
         if (args[0].matches("-print") || args[1].matches("-print")) {
             System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + call.toString());
         }
+
+        System.exit(0);
 
     }
 

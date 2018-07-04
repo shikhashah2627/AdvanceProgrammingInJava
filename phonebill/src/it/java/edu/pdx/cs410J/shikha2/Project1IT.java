@@ -26,7 +26,7 @@ public class Project1IT extends InvokeMainTestCase {
   public void testNoCommandLineArguments() {
     MainMethodResult result = invokeMain();
     assertThat(result.getExitCode(), equalTo(1));
-      assertThat(result.getTextWrittenToStandardError(), containsString("Missing name argument"));
+      assertThat(result.getTextWrittenToStandardError(), containsString("Missing argument"));
   }
 
     @Test
@@ -46,6 +46,50 @@ public class Project1IT extends InvokeMainTestCase {
     public void invokeMainWithWrongTime() {
         MainMethodResult result = invokeMain(Project1.class, "shikha shah", "503-473-4347", "123-456-7890", "1/2/3123", "1:2", "1/2/3123", "1:");
         assertThat(result.getTextWrittenToStandardOut(), containsString(""));
+    }
+
+    @Test
+    public void dashReadmeOptionPrintsOnlyReadme() {
+        MainMethodResult result = invokeMain("-README");
+        assertThat(result.getExitCode(), equalTo(0));
+        assertThat(result.getTextWrittenToStandardOut(), equalTo(Project1.README + "\n"));
+        assertThat(result.getTextWrittenToStandardError(), equalTo(""));
+    }
+
+    @Test
+    public void dashPrintOptionsPrintsNewlyCreatedPhoneCall() {
+        String caller = "123-456-7890";
+        String callee = "234-567-8901";
+        String startDate = "07/04/2018";
+        String startTime = "6:24";
+        String endDate = "07/04/2018";
+        String endTime = "6:48";
+        String name = "My Customer";
+        MainMethodResult result =
+                invokeMain(Project1.class, "-print", name, caller, callee, startDate, startTime, endDate, endTime);
+
+        assertThat(result.getExitCode(), equalTo(0));
+        String phoneCallToString = String.format("Phone call from %s to %s from %s %s to %s %s",
+                caller, callee, startDate, startTime, endDate, endTime);
+        assertThat(result.getTextWrittenToStandardOut(), containsString(phoneCallToString));
+    }
+
+    @Test
+    public void validCommandLineWithNoDashPrintOptionPrintsNothingToStandardOut() {
+        String caller = "123-456-7890";
+        String callee = "234-567-8901";
+        String startDate = "07/04/2018";
+        String startTime = "6:24";
+        String endDate = "07/04/2018";
+        String endTime = "6:48";
+
+        MainMethodResult result =
+                invokeMain("My Customer", caller, callee, startDate, startTime, endDate, endTime);
+
+        assertThat(result.getExitCode(), equalTo(0));
+        assertThat(result.getTextWrittenToStandardOut(), equalTo(""));
+        assertThat(result.getTextWrittenToStandardError(), equalTo(""));
+
     }
 
 }
