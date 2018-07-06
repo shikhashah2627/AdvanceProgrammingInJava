@@ -1,17 +1,16 @@
 package edu.pdx.cs410J.shikha2;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 
-/**
- * The main class for the CS410J Phone Bill Project
- */
-public class Project1 {
-
+public class Project2 {
     /**
      * <code>name_check</code>
      * This method helps to check customer name
+     *
      * @param name
-     *          caller name
+     * caller name
      */
     static final String README = "Author for Project 1: PhoneCall Project is : Shikha Shah" +
             "This project takes the command line argument of customer name , phone number of caller and callee and date and time from start to end" +
@@ -31,8 +30,8 @@ public class Project1 {
     /**
      * <code>number_format_check</code>
      * This method helps to check caller number and callee number whether it is XXX-XXX-XXXX
-     * @param phone_number
-     *         caller number and callee number
+     *
+     * @param phone_number caller number and callee number
      */
     public static void number_format_check(String phone_number) throws UnsupportedOperationException {
         String pattern1 = "^\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d";
@@ -48,8 +47,8 @@ public class Project1 {
     /**
      * <code>check_date_format</code>
      * This method helps to check the start data and end date entered in the format of mm/dd/yyyy
-     * @param date
-     *         start date and end date
+     *
+     * @param date start date and end date
      */
     public static void check_date_format(String date) {
         String dateTimeFormat = "([0-9]{1,2})/([0-9]{1,2})/\\d{4}";
@@ -64,12 +63,11 @@ public class Project1 {
         }
     }
 
-
     /**
      * <code>check_time_format</code>
      * This method checks the time syntax of the entered start and end time in the format of hh:mm
-     * @param time
-     *          start time and end time
+     *
+     * @param time start time and end time
      */
     public static void check_time_format(String time) {
         String time_format = "([0-9]{1,2}):([0-9]{1,2})";
@@ -83,16 +81,30 @@ public class Project1 {
     }
 
     /**
+     * @param file_path
+     */
+    public static void check_file(String file_path) {
+        try {
+            File f = new File(file_path);
+            f.createNewFile();
+        } catch (IOException e) {
+            System.out.println("Exception Occurred:");
+            System.exit(0);
+        }
+
+    }
+
+    /**
      * <code>main</code>
      * Invokes main class where all the arguments are parsed.
-     * @param args
-     *          args contains caller_name, caller_number, callee_number, start_date, start_time, end_date, end_time
+     *
+     * @param args args contains caller_name, caller_number, callee_number, start_date, start_time, end_date, end_time
      */
 
     public static void main(String[] args) {
 
-        String name, caller_number, callee_number, start_date, start_time, end_date, end_time;
-        name = caller_number = callee_number = start_date = start_time = end_date = end_time = null;
+        String name, caller_number, callee_number, start_date, start_time, end_date, end_time, file_path = "";
+        name = caller_number = callee_number = start_date = start_time = end_date = end_time = file_path = null;
 
         if (args.length == 0) {
             System.err.println("Missing command line arguments");
@@ -108,6 +120,14 @@ public class Project1 {
 
             if (arg.matches("-print")) {
                 continue;
+            }
+            if (arg.matches("-textFile")) {
+                System.out.println("You have given the file name");
+                continue;
+            }
+            if (file_path == null) {
+                file_path = arg;
+                check_file(file_path);
             }
             if (name == null) {
                 name = arg;
@@ -133,7 +153,6 @@ public class Project1 {
             }
             //System.out.println(arg);
         }
-
         if (name == null) {
             printErrorMessageAndExit("Missing name argument");
         } else if (caller_number == null) {
@@ -152,18 +171,24 @@ public class Project1 {
         bill.addPhoneCall(call);// refers to phone bill class's constructor that has an argument as customer name.
         Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
         //for (PhoneCall c : phoneCall) System.out.println(c);
-
+        TextDumper txtdump = new TextDumper();
+        txtdump.setFile_name(file_path);
+        try {
+            txtdump.dump(bill);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (args[0].matches("-print") || args[1].matches("-print")) {
             System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + call.toString());
         }
 
         System.exit(0);
-
     }
 
     private static void printErrorMessageAndExit(String s) {
         System.err.println(s);
         System.exit(1);
     }
+
 }
