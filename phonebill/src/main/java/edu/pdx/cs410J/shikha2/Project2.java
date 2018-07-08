@@ -91,7 +91,6 @@ public class Project2 {
             System.out.println("Exception Occurred:");
             System.exit(0);
         }
-
     }
 
     /**
@@ -128,8 +127,7 @@ public class Project2 {
             if (file_path == null) {
                 file_path = arg;
                 check_file(file_path);
-            }
-            if (name == null) {
+            } else if (name == null) {
                 name = arg;
                 name_check(name);
             } else if (caller_number == null) {
@@ -171,8 +169,7 @@ public class Project2 {
         bill.addPhoneCall(call);// refers to phone bill class's constructor that has an argument as customer name.
         Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
         //for (PhoneCall c : phoneCall) System.out.println(c);
-        TextDumper txtdump = new TextDumper();
-        txtdump.setFile_name(file_path);
+        TextDumper txtdump = new TextDumper(file_path);
         try {
             txtdump.dump(bill);
         } catch (IOException e) {
