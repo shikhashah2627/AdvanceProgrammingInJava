@@ -27,6 +27,7 @@ public class PhoneCall extends AbstractPhoneCall {
     }
 
     /**
+     * The following overriden function <code>getCaller</code> returns the caller number passed from command line argument.	
      * @return caller number
      */
     @Override
@@ -35,7 +36,7 @@ public class PhoneCall extends AbstractPhoneCall {
     }
 
     /**
-     *
+     * The following overriden function <code>getCallee</code> returns the callee number passed from command line argument.	
      * @return callee number.
      */
     @Override
@@ -44,7 +45,8 @@ public class PhoneCall extends AbstractPhoneCall {
     }
 
     /**
-     *
+     * The following overriden function <code>getStartTimeString</code> returns the start call date and time 
+     * passed from command line argument.
      * @return start time of the call.
      */
     @Override
@@ -53,7 +55,8 @@ public class PhoneCall extends AbstractPhoneCall {
     }
 
     /**
-     *
+     * The following overriden function <code>getEndTimeString</code> returns the end call date and time 
+     * passed from command line argument.
      * @return end time of the call.
      */
     @Override

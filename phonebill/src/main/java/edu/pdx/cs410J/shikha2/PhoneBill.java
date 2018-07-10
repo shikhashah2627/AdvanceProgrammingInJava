@@ -13,9 +13,12 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
         Customer = customer;
     }
 
-    private  Collection<PhoneCall> calls = new ArrayList<>();
+    private Collection<PhoneCall> calls = new ArrayList<>();
 
     /**
+     * The following overriden function <code>getCustomer</code> returns the caller
+     * name passed from command line argument.
+     * 
      * @return Customer name is returned.
      */
     @Override
@@ -23,6 +26,12 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
         return Customer;
     }
 
+    /**
+     * The following overriden function <code>getCustomer</code> returns the caller
+     * name passed from command line argument.
+     * 
+     * @return Customer name is returned.
+     */
     @Override
     public void addPhoneCall(PhoneCall phoneCall) {
         this.calls.add(phoneCall);
