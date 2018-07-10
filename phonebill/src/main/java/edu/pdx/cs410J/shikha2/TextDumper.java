@@ -2,10 +2,9 @@ package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
 
-import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.Collection;
 
 public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
     public String filename;
@@ -21,41 +20,30 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
      */
     @Override
     public void dump(AbstractPhoneBill bill) throws IOException {
-//        String customer_name = bill.getCustomer();
-//        System.out.println(customer_name);
-//        FileWriter fileWriter = new FileWriter(filename);
-//        PrintWriter printWriter = new PrintWriter(fileWriter);
-//        printWriter.print(customer_name);
-//        PrintStream console = System.out;
-        Collection<PhoneCall> calls = bill.getPhoneCalls();
-        //PrintWriter p = new PrintWriter(filename);
-        /*List<PhoneCall> list = new ArrayList<>();
 
-        for (PhoneCall c : calls ) {
-            list.add(c);
-        }*/
-        FileOutputStream fos = new FileOutputStream(filename);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(calls);
-        oos.close();
-           /* try {
-            FileWriter writer = new FileWriter(filename, true);
-            BufferedWriter bufferedWriter = new BufferedWriter(writer);
-            for (PhoneCall c : calls ) {
-                 input = c;
-                //System.out.println(c);
-                bufferedWriter.write(c);
+        /*
+        Collection<PhoneCall> call = bill.getPhoneCalls();
 
-            }
+        String data = call.stream().map(Object::toString)
+                .collect(Collectors.joining(", "));
 
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+        writer.write(data);
+        writer.close();
+
+       */
+        String line = "";
+        String caller_number, callee_number, start_date, start_time, end_date, end_time;
+        caller_number = callee_number = start_date = start_time = end_date = end_time = "";
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            caller_number = regexm(line, " to");
+
         }
-*/
 
-
-        //printWriter.close();
-
+        // Always close files.
+        reader.close();
     }
 }
+

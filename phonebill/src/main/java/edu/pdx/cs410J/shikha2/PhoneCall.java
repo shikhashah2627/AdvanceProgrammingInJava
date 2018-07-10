@@ -3,6 +3,9 @@ package edu.pdx.cs410J.shikha2;
 import edu.pdx.cs410J.AbstractPhoneCall;
 
 public class PhoneCall extends AbstractPhoneCall {
+
+    public PhoneCall() {
+    }
     String Caller_number, Callee_number, getStartTime, getEndTime;
 
     /**
@@ -15,6 +18,7 @@ public class PhoneCall extends AbstractPhoneCall {
      * @param end_date      End Date is the date when the call ended.
      * @param end_time      End time is the time when the call ended.
      */
+
     public PhoneCall(String Caller_number, String Callee_number, String start_date, String start_time, String end_date, String end_time) {
         this.Caller_number = Caller_number;
         this.Callee_number = Callee_number;
