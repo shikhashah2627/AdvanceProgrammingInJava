@@ -31,7 +31,7 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
         writer.write(data);
         writer.close();
 
-       */
+       
         String line = "";
         String caller_number, callee_number, start_date, start_time, end_date, end_time;
         caller_number = callee_number = start_date = start_time = end_date = end_time = "";
@@ -43,7 +43,7 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
         }
 
         // Always close files.
-        reader.close();
+        reader.close();*/
     }
 }
 
