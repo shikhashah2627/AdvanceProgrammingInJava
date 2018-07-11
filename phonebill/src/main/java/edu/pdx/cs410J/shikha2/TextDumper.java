@@ -2,9 +2,11 @@ package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
     public String filename;
@@ -21,7 +23,7 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
     @Override
     public void dump(AbstractPhoneBill bill) throws IOException {
 
-        /*
+
         Collection<PhoneCall> call = bill.getPhoneCalls();
 
         String data = call.stream().map(Object::toString)
@@ -31,19 +33,7 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
         writer.write(data);
         writer.close();
 
-       
-        String line = "";
-        String caller_number, callee_number, start_date, start_time, end_date, end_time;
-        caller_number = callee_number = start_date = start_time = end_date = end_time = "";
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
-            caller_number = regexm(line, " to");
 
-        }
-
-        // Always close files.
-        reader.close();*/
     }
 }
 
