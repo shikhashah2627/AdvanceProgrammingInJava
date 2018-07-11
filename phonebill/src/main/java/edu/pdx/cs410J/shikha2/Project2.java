@@ -1,5 +1,7 @@
 package edu.pdx.cs410J.shikha2;
 
+import edu.pdx.cs410J.ParserException;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -169,12 +171,19 @@ public class Project2 {
         bill.addPhoneCall(call);// refers to phone bill class's constructor that has an argument as customer name.
         Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
         //for (PhoneCall c : phoneCall) System.out.println(c);
+        TextParser txtparser = new TextParser(file_path, name);
         TextDumper txtdump = new TextDumper(file_path);
         try {
+
+            txtparser.parse();
+        } catch (ParserException e) {
+            e.printStackTrace();
+        }
+        /*try {
             txtdump.dump(bill);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         if (args[0].matches("-print") || args[1].matches("-print")) {
             System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + call.toString());
