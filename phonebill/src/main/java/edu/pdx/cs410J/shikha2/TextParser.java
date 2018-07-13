@@ -52,8 +52,8 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
             Validation val = new Validation(customer_name,values.get(0),values.get(1),start_date[0],start_date[1],end_date[0],end_date[1]);
             PhoneCall call = new PhoneCall(val);
             ((ArrayList<PhoneCall>) calls).add(call);
-            System.out.println("Key = " + key);
-            System.out.println("Values = " + values);
+            //System.out.println("Key = " + key);
+            //System.out.println("Values = " + values);
         }
 
         PhoneBill bill = new PhoneBill(customer_name);

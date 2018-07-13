@@ -3,8 +3,8 @@ package edu.pdx.cs410J.shikha2;
 import edu.pdx.cs410J.ParserException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 
 public class Project2 {
 
@@ -53,13 +53,12 @@ public class Project2 {
                 continue;
             }
             if (arg.matches("-textFile")) {
-                System.out.println("You have given the file name");
+                //System.out.println("You have given the file name");
                 continue;
             }
             if (file_path == null) {
-                file_path = args[+1];
+                file_path = arg;
                 check_file(file_path);
-                arg = args[+1];
                 continue;
             }
 
@@ -81,7 +80,6 @@ public class Project2 {
         }
 
         Validation val = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time);
-
         TextParser txtParser = new TextParser(file_path,name);
 
         try {
@@ -99,12 +97,17 @@ public class Project2 {
             e.printStackTrace();
         }
 
-//        Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
-//        //for (PhoneCall c : phoneCall) System.out.println(c);
+       if (args[0].matches("-print") || args[1].matches("-print") || args[2].matches("-print") || args[3].matches("-print")) {
+            PhoneBill bill = new PhoneBill(name) ;
+           try {
+               bill = (PhoneBill)txtParser.parse();
+               Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
+               for (PhoneCall c : phoneCall) System.out.println(c);
+           } catch (ParserException e) {
+               e.printStackTrace();
+           }
 
-       // if (args[0].matches("-print") || args[1].matches("-print") || args[2].matches("-print")) {
-       //     System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + call.toString());
-     //   }
+       }
 
         System.exit(0);
     }

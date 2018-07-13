@@ -45,9 +45,7 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
      for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
         Integer key = entry.getKey();
         List<String> values = entry.getValue();
-        writer.write(String.join(",", values));
-        System.out.println("Key = " + key);
-        System.out.println("Values = " + values);
+        writer.write(String.join(",", values)+"\n");
         }
         writer.close();
     }
