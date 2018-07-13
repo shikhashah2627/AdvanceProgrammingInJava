@@ -2,42 +2,24 @@ package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
 
-    private PrintWriter pw;      // Dumping destination
+    private String filename;      // Dumping destination
+    PhoneCall call ;
 
     /**
      * Creates a new text dumper that dumps to a file of a given name.
      * If the file does not exist, it is created.
      */
-    public TextDumper(String fileName) throws IOException {
-        this(new File(fileName));
+    public TextDumper(String fileName,PhoneCall call ) {
+        this.filename = fileName;
+        this.call = call;
     }
 
-
-    /**
-     * Creates a new text dumper that dumps to a given file.
-     */
-    public TextDumper(File file) throws IOException {
-        this(new PrintWriter(new FileWriter(file), true));
-    }
-
-    /**
-     * Creates a new text dumper that prints to a
-     * <code>PrintWriter</code>.  This way, we can dump to destinations
-     * other than files.
-     */
-    public TextDumper(PrintWriter pw) {
-        this.pw = pw;
-    }
 
     /**
      * Dumps a phone bill to some destination.
@@ -47,30 +29,27 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
     @Override
     public void dump(AbstractPhoneBill bill) throws IOException {
 
-        Set<PhoneCall> call = new HashSet<PhoneCall>();
-        Iterator iter = bill.getPhoneCalls().iterator();
+     Map<Integer, List<String>> map = new HashMap<Integer, List<String>>();
+     List<String> args_method = new ArrayList<String>();
+     Integer size_bill = bill.getPhoneCalls().size();
 
+     args_method.add(call.Caller_number);
+     args_method.add(call.Callee_number);
+     args_method.add(call.getStartTime);
+     args_method.add(call.getEndTime);
 
-        int lines = 0;
-        while (iter.hasNext()) {
-            PhoneBill bill1 = (PhoneBill) iter.next();
-            StringBuffer data = new StringBuffer();
-            data.append("id" + bill1.getCustomer());
-            System.out.println(data);
+     bill.addPhoneCall(call);
+     map.put(size_bill+1, args_method);
+     BufferedWriter writer = new BufferedWriter(new FileWriter(filename,true));
 
-
+     for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
+        Integer key = entry.getKey();
+        List<String> values = entry.getValue();
+        writer.write(String.join(",", values));
+        System.out.println("Key = " + key);
+        System.out.println("Values = " + values);
         }
-
-        //Collection<PhoneCall> call = bill.getPhoneCalls();
-
-//        String data = call.stream().map(Object::toString)
-//                .collect(Collectors.joining(", "));
-//
-//        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-//        writer.write(data);
-//        writer.close();
-
-
+        writer.close();
     }
 }
 
