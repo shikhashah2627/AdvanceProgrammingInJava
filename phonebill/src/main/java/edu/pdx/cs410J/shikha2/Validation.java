@@ -1,0 +1,71 @@
+package edu.pdx.cs410J.shikha2;
+
+import org.junit.Assert;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Validation {
+    String name, caller_number, callee_number, start_date, start_time, end_date, end_time;
+
+    /**
+     * <code>Validation</code>
+     *
+     * @param name
+     * @param Caller_Number
+     * @param Callee_Number
+     * @param Start_Date
+     * @param Start_Time
+     * @param End_Date
+     * @param End_time
+     */
+    public Validation(String name, String Caller_Number, String Callee_Number, String Start_Date, String Start_Time, String End_Date, String End_time) {
+        String name_pattern   = "([a-zA-Z0-9] ?)+[a-zA-Z0-9]";
+        String Number_pattern = "^\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d";
+        //String Date_pattern = "([0-9]{1,2})/([0-9]{1,2})/\\d{4}";
+        String Time_Pattern = "([0-9]{1,2}):([0-9]{1,2})";
+
+        try {
+            if (name.matches(name_pattern)) {
+                this.name = name;
+            } else throw new UnsupportedOperationException("Insert Proper Name and no special characters are allowed.");
+
+            if (Caller_Number.matches(Number_pattern)) {
+                this.caller_number = Caller_Number;
+            } else
+                throw new UnsupportedOperationException("Valid Phone Number of Caller should be in format of XXX-XXX-XXXX");
+
+            if (Callee_Number.matches(Number_pattern)) {
+                this.callee_number = Callee_Number;
+            } else
+                throw new UnsupportedOperationException("Valid Phone Number of Callee should be in format of XXX-XXX-XXXX");
+
+            boolean parsed = false;
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                sdf.setLenient(false);
+                sdf.parse(Start_Date);
+                sdf.parse(End_Date);
+                parsed = true;
+            } catch (ParseException ex) {
+                System.out.println(ex);
+                System.exit(0);
+            }
+
+            if (parsed) {
+                this.start_date = Start_Date;
+                this.end_date = End_Date;
+            }
+
+            if ((Start_Time.matches(Time_Pattern)) && (End_time.matches(Time_Pattern))) {
+                this.start_time = Start_Time;
+                this.end_time = End_time;
+            } else throw new UnsupportedOperationException("Please enter proper time");
+
+        } catch (UnsupportedOperationException ex) {
+            System.out.println(ex);
+            System.exit(0);
+        }
+    }
+}

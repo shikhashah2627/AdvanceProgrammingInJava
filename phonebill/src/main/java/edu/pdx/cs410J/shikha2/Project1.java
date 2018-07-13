@@ -146,19 +146,19 @@ public class Project1 {
             printErrorMessageAndExit("Missing end_time argument");
         }
 
-        PhoneCall call = new PhoneCall(caller_number, callee_number, start_date, start_time, end_date, end_time);
+        //PhoneCall call = new PhoneCall(caller_number, callee_number, start_date, start_time, end_date, end_time);
         // Refer to one of Dave's classes so that we can be sure it is on the classpath
-        PhoneBill bill = new PhoneBill(name);
-        bill.addPhoneCall(call);// refers to phone bill class's constructor that has an argument as customer name.
-        Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
+        //PhoneBill bill = new PhoneBill(name);
+        //bill.addPhoneCall(call);// refers to phone bill class's constructor that has an argument as customer name.
+        //Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
         //for (PhoneCall c : phoneCall) System.out.println(c);
 
 
-        if (args[0].matches("-print") || args[1].matches("-print")) {
-            System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + call.toString());
-        }
-
-        System.exit(0);
+//        if (args[0].matches("-print") || args[1].matches("-print")) {
+//            System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + call.toString());
+//        }
+//
+//        System.exit(0);
 
     }
 

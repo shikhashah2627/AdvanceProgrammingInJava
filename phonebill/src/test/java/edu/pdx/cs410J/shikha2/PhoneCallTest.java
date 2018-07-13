@@ -11,12 +11,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class PhoneCallTest {
 
+  /*
+  @Ignore
   @Test //(expected = UnsupportedOperationException.class)
   public void getStartTimeStringNeedsToBeImplemented() {
     PhoneCall call = new PhoneCall("??", "??", "??", "??", "??", "??");
     assertThat(call.getStartTimeString(), containsString("??"));
   }
 
+  @Ignore
   @Test
   public void initiallyAllPhoneCallsHaveTheSameCallee() {
     PhoneCall call = new PhoneCall("??", "??", "??", "??", "??", "??");
