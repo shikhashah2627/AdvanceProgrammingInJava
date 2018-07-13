@@ -106,7 +106,6 @@ public class Project2 {
            } catch (ParserException e) {
                e.printStackTrace();
            }
-
        }
 
         System.exit(0);

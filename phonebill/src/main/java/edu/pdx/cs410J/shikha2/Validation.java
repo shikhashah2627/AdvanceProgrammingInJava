@@ -4,6 +4,9 @@ import org.junit.Assert;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Validation {
@@ -45,15 +48,23 @@ public class Validation {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
                 sdf.setLenient(false);
-                sdf.parse(Start_Date);
-                sdf.parse(End_Date);
-                parsed = true;
+                Date now = new Date();
+                if((sdf.parse(Start_Date).getTime() - now.getTime()) <= 0 || (sdf.parse(End_Date).getTime() - now.getTime()) <= 0 ) {
+                    if(((sdf.parse(Start_Date).getTime() - sdf.parse(End_Date).getTime()) <= 0)){
+                        System.out.println("Start Date and End Dates are fine..");
+                        parsed = true;
+                    }
+                } else {
+                        System.out.println("Your start date or End date is highly impossible..");
+                        System.exit(0);
+                    }
             } catch (ParseException ex) {
                 System.out.println(ex);
                 System.exit(0);
             }
 
             if (parsed) {
+                System.out.println("Assigning the dates.");
                 this.start_date = Start_Date;
                 this.end_date = End_Date;
             }
