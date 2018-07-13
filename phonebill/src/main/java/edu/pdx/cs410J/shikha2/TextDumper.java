@@ -2,11 +2,13 @@ package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
 
@@ -54,18 +56,19 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
             PhoneBill bill1 = (PhoneBill) iter.next();
             StringBuffer data = new StringBuffer();
             data.append("id" + bill1.getCustomer());
+            System.out.println(data);
 
 
         }
 
         //Collection<PhoneCall> call = bill.getPhoneCalls();
 
-        String data = call.stream().map(Object::toString)
-                .collect(Collectors.joining(", "));
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-        writer.write(data);
-        writer.close();
+//        String data = call.stream().map(Object::toString)
+//                .collect(Collectors.joining(", "));
+//
+//        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+//        writer.write(data);
+//        writer.close();
 
 
     }

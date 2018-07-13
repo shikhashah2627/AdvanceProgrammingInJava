@@ -1,10 +1,12 @@
 package edu.pdx.cs410J.shikha2;
 
-import edu.pdx.cs410J.ParserException;
-
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Project2 {
 
@@ -54,11 +56,14 @@ public class Project2 {
             }
             if (arg.matches("-textFile")) {
                 System.out.println("You have given the file name");
+                continue;
+            }
+
                 if (file_path == null) {
-                    file_path = arg;
+                    file_path = args[+1];
                     check_file(file_path);
-                }
-            } else if (name == null) {
+
+                } else if (name == null) {
                 name = arg;
                 //name_check(name);
             } else if (caller_number == null) {
@@ -91,25 +96,61 @@ public class Project2 {
 
         bill.addPhoneCall(call);
 
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+
+        // create list one and store values
+
+        List<String> valSetOne = new ArrayList<String>();
+
+        valSetOne.add(call.getCaller());
+        valSetOne.add(call.getCallee());
+        valSetOne.add(call.getStartTimeString());
+        valSetOne.add(call.getEndTimeString());
+
+        // put values into map
+
+        map.put(val.name, valSetOne);
+
+        // iterate and display values
+
+        System.out.println("Fetching Keys and corresponding [Multiple] Values n");
+
+        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            String key = entry.getKey();
+            List<String> values = entry.getValue();
+            System.out.println("Key = " + key);
+            System.out.println("Values = " + values);
+
+        }
+
+
+
+
+
+
 //        Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
 //        //for (PhoneCall c : phoneCall) System.out.println(c);
 
-        TextParser txtparser = new TextParser(file_path, name);
-
-        TextDumper txtdump = new TextDumper(file_path);
         try {
+            TextParser txtparser = new TextParser(file_path, name);
+            //txtparser.parse();
+        } catch (FileNotFoundException ex) {
 
-            txtparser.parse();
-        } catch (ParserException e) {
-            e.printStackTrace();
         }
+
+//        try {
+//        TextDumper txtdump = new TextDumper(file_path);
+//
+//        } catch (ParserException e) {
+//            e.printStackTrace();
+//        }
         /*try {
             txtdump.dump(bill);
         } catch (IOException e) {
             e.printStackTrace();
         }*/
 
-        if (args[0].matches("-print") || args[1].matches("-print")) {
+        if (args[0].matches("-print") || args[1].matches("-print") || args[2].matches("-print")) {
             System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + call.toString());
         }
 

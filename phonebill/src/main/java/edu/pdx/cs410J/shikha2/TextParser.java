@@ -4,12 +4,12 @@ import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
-import java.util.Collection;
 
 public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
 
     String filename = "";
     String customer_name = "";
+    private LineNumberReader in;     // Read input from here
 
     public TextParser(String filename, String customer_name) throws FileNotFoundException {
         this(new File(filename));
@@ -24,8 +24,10 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
         this(new FileReader(file));
     }
 
-    public TextParser(FileReader fileReader) {
+    public TextParser(Reader reader) {
+        this.in = new LineNumberReader(reader);
     }
+
 
     /**
      * Parses some source and returns a phone bill
