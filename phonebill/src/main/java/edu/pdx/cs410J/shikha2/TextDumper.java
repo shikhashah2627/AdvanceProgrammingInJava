@@ -12,8 +12,10 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
     PhoneCall call ;
 
     /**
-     * Creates a new text dumper that dumps to a file of a given name.
-     * If the file does not exist, it is created.
+     * <code>TextDumper</code>
+     * The parameters are passed from the main class and thus provides filename and customer name,
+     * @param fileName
+     * @param call
      */
     public TextDumper(String fileName,PhoneCall call ) {
         this.filename = fileName;
@@ -22,8 +24,9 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
 
 
     /**
-     * Dumps a phone bill to some destination.
-        *
+     * <code>Dump</code>
+     * Dumps a phone bill to the mentioned file name.
+     *
      * @param bill
      */
     @Override

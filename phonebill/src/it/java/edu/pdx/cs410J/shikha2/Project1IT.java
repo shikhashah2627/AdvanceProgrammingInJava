@@ -87,9 +87,40 @@ public class Project1IT extends InvokeMainTestCase {
                 invokeMain("My Customer", caller, callee, startDate, startTime, endDate, endTime);
 
         assertThat(result.getExitCode(), equalTo(0));
+
         assertThat(result.getTextWrittenToStandardOut(), equalTo(""));
         assertThat(result.getTextWrittenToStandardError(), equalTo(""));
 
     }
 
+    @Test
+    public void inProject2checkREADME() {
+        MainMethodResult result =
+                invokeMain(Project2.class,"-README");
+
+        assertThat(result.getExitCode(), equalTo(0));
+        assertThat(result.getTextWrittenToStandardOut(), equalTo(Project2.README + "\n"));
+        assertThat(result.getTextWrittenToStandardError(), equalTo(""));
+
+    }
+
+    @Test
+    public void Project2AppendtoFile() {
+        String file_path = "/u/shikha2/Downloads/APJ/phonebill/xyz.txt";
+        String caller = "123-456-7890";
+        String callee = "234-567-8901";
+        String startDate = "07/04/2018";
+        String startTime = "6:24";
+        String endDate = "07/04/2018";
+        String endTime = "6:48";
+
+        MainMethodResult result =
+                invokeMain(Project2.class,"-textFile" ,file_path, "-print","My Customer", caller, callee, startDate, startTime, endDate, endTime);
+
+        assertThat(result.getExitCode(), equalTo(0));
+        assertThat(result.getTextWrittenToStandardOut(), equalTo(
+                "Phone call from 123-456-7890 to 234-567-8901 from 07/04/2018 6:24 to 07/04/2018 6:48\\n"));
+        assertThat(result.getTextWrittenToStandardError(), equalTo(""));
+
+    }
 }

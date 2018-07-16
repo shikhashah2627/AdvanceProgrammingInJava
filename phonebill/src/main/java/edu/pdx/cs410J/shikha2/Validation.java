@@ -15,18 +15,19 @@ public class Validation {
     /**
      * <code>Validation</code>
      *
-     * @param name
-     * @param Caller_Number
-     * @param Callee_Number
-     * @param Start_Date
-     * @param Start_Time
-     * @param End_Date
-     * @param End_time
+     * Before inserting a new phone call or validate the existing bill objects are passed to validation class.
+     *
+     * @param name - customer name
+     * @param Caller_Number  - Caller Number
+     * @param Callee_Number - Callee Number
+     * @param Start_Date - Start date of the call
+     * @param Start_Time - Time when call started
+     * @param End_Date - End Date of the call received.
+     * @param End_time - Time when the call ended.
      */
     public Validation(String name, String Caller_Number, String Callee_Number, String Start_Date, String Start_Time, String End_Date, String End_time) {
         String name_pattern   = "([a-zA-Z0-9] ?)+[a-zA-Z0-9]";
         String Number_pattern = "^\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d";
-        //String Date_pattern = "([0-9]{1,2})/([0-9]{1,2})/\\d{4}";
         String Time_Pattern = "([0-9]{1,2}):([0-9]{1,2})";
 
         try {
@@ -51,7 +52,7 @@ public class Validation {
                 Date now = new Date();
                 if((sdf.parse(Start_Date).getTime() - now.getTime()) <= 0 || (sdf.parse(End_Date).getTime() - now.getTime()) <= 0 ) {
                     if(((sdf.parse(Start_Date).getTime() - sdf.parse(End_Date).getTime()) <= 0)){
-                        System.out.println("Start Date and End Dates are fine..");
+                        //System.out.println("Start Date and End Dates are fine..");
                         parsed = true;
                     }
                 } else {
@@ -64,7 +65,7 @@ public class Validation {
             }
 
             if (parsed) {
-                System.out.println("Assigning the dates.");
+                //System.out.println("Assigning the dates.");
                 this.start_date = Start_Date;
                 this.end_date = End_Date;
             }

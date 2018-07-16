@@ -4,21 +4,33 @@ import edu.pdx.cs410J.ParserException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class Project2 {
 
-    static final String README = "Author for Project 1: PhoneCall Project is : Shikha Shah" +
+    static final String README = "Author for Project 2: PhoneCall Project is : Shikha Shah. " + "\n" +
             "This project takes the command line argument of customer name , phone number of caller and callee and date and time from start to end" +
-            "You can also print the the args by specifying -print option before passing the argument";
+            "You can also print the the args by specifying -print option before passing the argument. " + "\n" + "Adding to that now " +
+            "there is an option to read the bill from text file or append the exisitng bill with new phone call by providing -textFile option.";
 
-    /**
+    /** <code>Check File</code> checks if the file exists and if not creates it.
      * @param file_path
      */
     public static void check_file(String file_path) {
         try {
             File f = new File(file_path);
-            f.createNewFile();
+            if(f.getName().toLowerCase().endsWith(".txt")) {
+                if (f.exists() && f.length() == 0.0) {
+                    System.out.println("It highly inappropriate, since file exists but size 0.");
+                    System.exit(0);
+                } else {
+                    f.createNewFile();
+                }
+            }   else {
+                System.out.println("File name not appropriate.");
+                System.exit(0);
+            }
         } catch (IOException e) {
             System.out.println("Exception Occurred:");
             System.exit(0);
@@ -42,21 +54,26 @@ public class Project2 {
             System.exit(1);
         }
 
+        if (containsOption(args, "-README")) {
+            System.out.println(README);
+            System.exit(0);
+        }
+
         for (String arg : args) {
-
-            if (arg.matches("-README")) {
-                System.out.println(README);
-                System.exit(0);
+            if (arg.startsWith("-")) {
+                if ((arg.matches("-print") || arg.matches("-textFile"))) {
+                } else {
+                    System.out.println("Your -options are inappropriate!");
+                    System.exit(0);
+                }
             }
-
             if (arg.matches("-print")) {
                 continue;
             }
             if (arg.matches("-textFile")) {
-                //System.out.println("You have given the file name");
                 continue;
             }
-            if (file_path == null) {
+            if (containsOption(args, "-textFile") && file_path == null) {
                 file_path = arg;
                 check_file(file_path);
                 continue;
@@ -76,44 +93,69 @@ public class Project2 {
                 end_date = arg;
             } else if (end_time == null) {
                 end_time = arg;
-            }
-        }
-
-        Validation val = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time);
-        TextParser txtParser = new TextParser(file_path,name);
-
-        try {
-            if (caller_number != null) {
-                PhoneCall new_call = new PhoneCall(val);
-                TextDumper txtDumper = new TextDumper(file_path,new_call);
-                txtDumper.dump(txtParser.parse());
-
             } else {
-                txtParser.parse();
+                System.out.println("Wrong input is provided");
+                System.exit(0);
             }
-        } catch (ParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            }
+
+
+            Validation val       = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time);
+            PhoneCall  new_call  = new PhoneCall(val);
+
+            if (file_path != null) {
+                TextParser txtParser = new TextParser(file_path, name);
+                try {
+                    if (caller_number != null) {
+
+                        TextDumper txtDumper = new TextDumper(file_path, new_call);
+                        txtDumper.dump(txtParser.parse());
+
+                    } else {
+                        txtParser.parse();
+                    }
+                } catch (ParserException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (containsOption(args, "-print")) {
+                    new PhoneBill(name);
+                    PhoneBill bill;
+                    try {
+                        bill = (PhoneBill) txtParser.parse();
+                        Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
+                        for (PhoneCall c : phoneCall) System.out.println(c);
+                    } catch (ParserException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                if (containsOption(args, "-print")) {
+                    PhoneBill bill = new PhoneBill(name);
+                    bill.addPhoneCall(new_call);
+                    System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + new_call.toString());
+                }
+
+            }
+
+
+
+            System.exit(0);
         }
 
-       if (args[0].matches("-print") || args[1].matches("-print") || args[2].matches("-print") || args[3].matches("-print")) {
-            PhoneBill bill = new PhoneBill(name) ;
-           try {
-               bill = (PhoneBill)txtParser.parse();
-               Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
-               for (PhoneCall c : phoneCall) System.out.println(c);
-           } catch (ParserException e) {
-               e.printStackTrace();
-           }
-       }
+        private static void printErrorMessageAndExit (String s){
+            System.err.println(s);
+            System.exit(1);
+        }
 
-        System.exit(0);
+        /**
+         * <code>containsOption</code>
+         * @param args
+         * @param option
+         * @return list of all the options passed in the argument.
+         */
+        private static boolean containsOption(String[]args, String option){
+            return Arrays.stream(args).anyMatch(s -> s.equals(option));
+        }
     }
-
-    private static void printErrorMessageAndExit(String s) {
-        System.err.println(s);
-        System.exit(1);
-    }
-
-}
