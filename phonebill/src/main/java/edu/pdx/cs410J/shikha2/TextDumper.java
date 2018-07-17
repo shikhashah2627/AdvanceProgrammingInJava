@@ -36,6 +36,7 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
      List<String> args_method = new ArrayList<String>();
      Integer size_bill = bill.getPhoneCalls().size();
 
+     args_method.add(bill.getCustomer()); // adding customer name
      args_method.add(call.Caller_number);
      args_method.add(call.Callee_number);
      args_method.add(call.getStartTime);

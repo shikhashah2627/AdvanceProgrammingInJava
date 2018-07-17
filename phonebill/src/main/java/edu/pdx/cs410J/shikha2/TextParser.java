@@ -53,14 +53,18 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
         for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
             Integer key = entry.getKey();
             List<String> values = entry.getValue();
-            String[] start_date = values.get(2).split(" ");
-            String[] end_date = values.get(3).split(" ");
-            // the values of the file are passed to the validation class.
-            Validation val = new Validation(customer_name,values.get(0),values.get(1),start_date[0],start_date[1],end_date[0],end_date[1]);
-            PhoneCall call = new PhoneCall(val);
-            ((ArrayList<PhoneCall>) calls).add(call);
-            //System.out.println("Key = " + key);
-            //System.out.println("Values = " + values);
+            if (values.get(0).matches(this.customer_name)) {
+                String[] start_date = values.get(3).split(" ");
+                String[] end_date   = values.get(4).split(" ");
+                // the values of the file are passed to the validation class.
+                // passing cusotmer name as an argument from file.
+                Validation val  = new Validation(values.get(0), values.get(1), values.get(2), start_date[0], start_date[1], end_date[0], end_date[1]);
+                PhoneCall  call = new PhoneCall(val);
+                ((ArrayList<PhoneCall>) calls).add(call);
+            } else {
+                System.out.println("Passed customer name and the file name doesn't correlate.");
+                System.exit(0);
+            }
         }
 
         // create the phone bill by adding the existing call which are read from the file.
