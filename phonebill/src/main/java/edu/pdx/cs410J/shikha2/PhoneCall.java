@@ -9,8 +9,8 @@ public class PhoneCall extends AbstractPhoneCall {
     public PhoneCall(Validation val) {
        this.Caller_number =  val.caller_number;
        this.Callee_number = val.callee_number;
-       this.getStartTime = val.start_date + " " + val.start_time;
-       this.getEndTime = val.end_date + " " + val.end_time;
+       this.getStartTime = val.start_date_time;
+       this.getEndTime = val.end_date_time;
     }
 
     @Override

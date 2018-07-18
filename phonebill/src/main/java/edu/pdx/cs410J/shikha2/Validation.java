@@ -2,6 +2,7 @@ package edu.pdx.cs410J.shikha2;
 
 import org.junit.Assert;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -10,7 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Validation {
-    String name, caller_number, callee_number, start_date, start_time, end_date, end_time;
+    String name, caller_number, callee_number, start_date_time, end_date_time;
+
 
     /**
      * <code>Validation</code>
@@ -24,8 +26,9 @@ public class Validation {
      * @param Start_Time - Time when call started
      * @param End_Date - End Date of the call received.
      * @param End_time - Time when the call ended.
+     * @param AMorPM - Time mode - 12 hour format
      */
-    public Validation(String name, String Caller_Number, String Callee_Number, String Start_Date, String Start_Time, String End_Date, String End_time) {
+    public Validation(String name, String Caller_Number, String Callee_Number, String Start_Date, String Start_Time, String End_Date, String End_time, String start_AMorPM, String end_AMorPM) {
         String name_pattern   = "([a-zA-Z0-9] ?)+[a-zA-Z0-9]";
         String Number_pattern = "^\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d";
         String Time_Pattern = "([0-9]{1,2}):([0-9]{1,2})";
@@ -47,11 +50,14 @@ public class Validation {
 
             boolean parsed = false;
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:m a");
+                start_date_time = Start_Date + " " + Start_Time + " " + start_AMorPM;
+                end_date_time = End_Date + " " + End_time + " " + end_AMorPM;
                 sdf.setLenient(false);
                 Date now = new Date();
-                if((sdf.parse(Start_Date).getTime() - now.getTime()) <= 0 || (sdf.parse(End_Date).getTime() - now.getTime()) <= 0 ) {
-                    if(((sdf.parse(Start_Date).getTime() - sdf.parse(End_Date).getTime()) <= 0)){
+                //System.out.println(DateFormat.getInstance(DateFormat.SHORT).format(now));
+                if((sdf.parse(start_date_time).getTime() - now.getTime()) <= 0 || (sdf.parse(end_date_time).getTime() - now.getTime()) <= 0 ) {
+                    if(((sdf.parse(start_date_time).getTime() - sdf.parse(end_date_time).getTime()) <= 0)){
                         //System.out.println("Start Date and End Dates are fine..");
                         parsed = true;
                     }
@@ -65,15 +71,10 @@ public class Validation {
             }
 
             if (parsed) {
-                //System.out.println("Assigning the dates.");
-                this.start_date = Start_Date;
-                this.end_date = End_Date;
+                //System.out.println("Assigning the dates with time and amORPm");
+                this.start_date_time = Start_Date + " " + Start_Time + " " + start_AMorPM;
+                this.end_date_time = End_Date + " " + End_Date + " " + end_AMorPM;
             }
-
-            if ((Start_Time.matches(Time_Pattern)) && (End_time.matches(Time_Pattern))) {
-                this.start_time = Start_Time;
-                this.end_time = End_time;
-            } else throw new UnsupportedOperationException("Please enter proper time");
 
         } catch (UnsupportedOperationException ex) {
             System.out.println(ex);

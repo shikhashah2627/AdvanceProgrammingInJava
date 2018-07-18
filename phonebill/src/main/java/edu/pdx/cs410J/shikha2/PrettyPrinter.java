@@ -13,6 +13,6 @@ public class PrettyPrinter implements PhoneBillDumper {
      */
     @Override
     public void dump(AbstractPhoneBill bill) throws IOException {
-
+        // print the bill in a chronological order.
     }
 }
