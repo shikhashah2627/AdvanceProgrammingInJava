@@ -32,7 +32,7 @@ public class AboutObjects {
         Object object = new Object();
         // TODO: Why is it best practice to ALWAYS override toString?
         String expectedToString = MessageFormat.format("{0}@{1}", Object.class.getName(), Integer.toHexString(object.hashCode()));
-        assertEquals(expectedToString, "Object@3647ba9b"); // hint: object.toString()
+        assertEquals(expectedToString,"java.lang.Object@" +  Integer.toHexString(object.hashCode()) ); // hint: object.toString()
     }
 
     @Koan
@@ -44,13 +44,13 @@ public class AboutObjects {
                 return string;
             }
         };
-        assertEquals(string + object,"java.lang.Object@6c2396bf");
+        assertEquals(string + object,"haha");
     }
 
     @Koan
     public void toStringIsTestedForNullWhenInvokedImplicitly() {
         String string = "string";
-        assertEquals(string + null, "string");
+        assertEquals(string + null, "stringnull");
     }
 
     private Class<?>[] getAncestors(Object object) {
