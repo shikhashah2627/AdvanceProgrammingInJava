@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.shikha2;
 
+import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.ParserException;
 
 import java.io.File;
@@ -117,53 +118,53 @@ public class Project3 {
 
         Validation val = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time, start_AMorPM, end_AMorPM);
         PhoneCall  new_call  = new PhoneCall(val);
+        //PhoneBill bill = new PhoneBill(val.name);
+
+
+        //Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
+        //for (PhoneCall c : phoneCall) System.out.println(c);
+
 //
 //
-//        if (file_path != null) {
-//            TextParser txtParser = new TextParser(file_path, name);
-//            try {
-//                if (caller_number != null) {
-//
-//                    TextDumper txtDumper = new TextDumper(file_path, new_call);
-//                    txtDumper.dump(txtParser.parse());
-//
-//                } else {
-//                    txtParser.parse();
-//                }
-//            } catch (ParserException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            if (containsOption(args, "-print")) {
-//                new PhoneBill(name);
-//                PhoneBill bill;
-//                try {
-//                    bill = (PhoneBill) txtParser.parse();
-//                    Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
-//                    for (PhoneCall c : phoneCall) System.out.println(c);
-//                } catch (ParserException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        } else {
-//            if (containsOption(args, "-print")) {
-//                PhoneBill bill = new PhoneBill(name);
-//                bill.addPhoneCall(new_call);
-//                System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + new_call.toString());
-//            }
-//
-//        }
-//
-//
-//
-//        System.exit(0);
-//    }
-//
-//    private static void printErrorMessageAndExit (String s){
-//        System.err.println(s);
-//        System.exit(1);
-//    }
+        if (file_path != null) {
+            TextParser txtParser = new TextParser(file_path, name);
+            try {
+                if (caller_number != null) {
+
+                    TextDumper txtDumper = new TextDumper(file_path, new_call);
+                    txtDumper.dump(txtParser.parse());
+
+                } else {
+                    txtParser.parse();
+                }
+            } catch (ParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (containsOption(args, "-print")) {
+                new PhoneBill(name);
+                PhoneBill bill;
+                try {
+                    bill = (PhoneBill) txtParser.parse();
+                    Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
+                    for (PhoneCall c : phoneCall) System.out.println(c);
+                } catch (ParserException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            if (containsOption(args, "-print")) {
+                PhoneBill bill = new PhoneBill(name);
+                bill.addPhoneCall(new_call);
+                System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + new_call.toString());
+            }
+
+        }
+
+
+
+        System.exit(0);
     }
     /**
      * <code>containsOption</code>

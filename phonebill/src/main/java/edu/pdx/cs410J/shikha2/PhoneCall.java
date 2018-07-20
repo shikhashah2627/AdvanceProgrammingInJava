@@ -2,15 +2,19 @@ package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.AbstractPhoneCall;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class PhoneCall extends AbstractPhoneCall {
 
-    String Caller_number, Callee_number, getStartTime, getEndTime;
+    String Caller_number, Callee_number, formatted_start_time, formatted_end_time;
+    Date getStartTime, getEndTime;
 
     public PhoneCall(Validation val) {
        this.Caller_number =  val.caller_number;
        this.Callee_number = val.callee_number;
-       this.getStartTime = val.start_date_time;
-       this.getEndTime = val.end_date_time;
+       this.getStartTime = val.start_date;
+       this.getEndTime = val.end_date;
     }
 
     @Override
@@ -33,8 +37,19 @@ public class PhoneCall extends AbstractPhoneCall {
      * @return start time of the call.
      */
     @Override
-    public String getStartTimeString() {
+    public Date getStartTime() {
         return getStartTime;
+    }
+
+    /**
+     * Returns a textual representation of the time that this phone call
+     * was originated.
+     */
+    @Override
+    public String getStartTimeString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:m a");
+        this.formatted_start_time = sdf.format(getStartTime).toLowerCase();
+        return formatted_start_time;
     }
 
     /**
@@ -43,8 +58,17 @@ public class PhoneCall extends AbstractPhoneCall {
      * @return end time of the call.
      */
     @Override
+    public Date getEndTime() { return getEndTime; }
+
+    /**
+     * Returns a textual representation of the time that this phone call
+     * was completed.
+     */
+    @Override
     public String getEndTimeString() {
-        return getEndTime;
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:m a");
+        this.formatted_end_time = sdf.format(getEndTime).toLowerCase();
+        return formatted_end_time;
     }
 
 
