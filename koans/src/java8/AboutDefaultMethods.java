@@ -17,12 +17,13 @@ public class AboutDefaultMethods {
         };
         String capitalizedReversed = stringUtil.capitalize(
                 stringUtil.reverse("gnirut"));
-        assertEquals(capitalizedReversed, __);
+        assertEquals(capitalizedReversed, "TURING");
     }
 
     @Koan
-    public void interfaceStaticMethod() {
-        assertEquals(StringUtil.enclose("me"), __);
+    public void interfaceStaticMethod()
+    {
+        assertEquals(StringUtil.enclose("me"), "[me]");
     }
 
     interface StringUtil {
