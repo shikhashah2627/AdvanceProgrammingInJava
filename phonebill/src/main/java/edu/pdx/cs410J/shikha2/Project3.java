@@ -48,8 +48,8 @@ public class Project3 {
 
     public static void main(String[] args) {
 
-        String name, caller_number, callee_number, start_date, start_time, end_date, end_time, file_path, start_AMorPM, end_AMorPM;
-        name = caller_number = callee_number = start_date = start_time = end_date = end_time = file_path = start_AMorPM = end_AMorPM = null;
+        String name, caller_number, callee_number, start_date, start_time, end_date, end_time, file_path, start_AMorPM, end_AMorPM,pretty_file;
+        name = caller_number = callee_number = start_date = start_time = end_date = end_time = file_path = start_AMorPM = end_AMorPM = pretty_file = null;
 
         if (args.length == 0) {
             System.err.println("Missing command line arguments");
@@ -63,10 +63,21 @@ public class Project3 {
 
         for (String arg : args) {
             if (arg.startsWith("-")) {
-                if ((arg.matches("-print") || arg.matches("-textFile"))) {
+                if ((arg.matches("-print") || arg.matches("-textFile") || arg.matches("-pretty") || arg.matches("-"))) {
                 } else {
                     System.out.println("Your -options are inappropriate!");
                     System.exit(0);
+                }
+            }
+            if(arg.matches("-pretty")) continue;
+
+            if (containsOption(args, "-pretty") && pretty_file == null) {
+                pretty_file = arg;
+                if (arg.matches("-")){
+                    continue;
+                } else {
+                    check_file(pretty_file);
+                    continue;
                 }
             }
             if (arg.matches("-print")) {
@@ -80,6 +91,7 @@ public class Project3 {
                 check_file(file_path);
                 continue;
             }
+
 
             if (name == null) {
                 name = arg;
@@ -118,21 +130,23 @@ public class Project3 {
 
         Validation val = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time, start_AMorPM, end_AMorPM);
         PhoneCall  new_call  = new PhoneCall(val);
-        //PhoneBill bill = new PhoneBill(val.name);
 
-
-        //Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
-        //for (PhoneCall c : phoneCall) System.out.println(c);
-
-//
-//
         if (file_path != null) {
             TextParser txtParser = new TextParser(file_path, name);
+
             try {
                 if (caller_number != null) {
 
                     TextDumper txtDumper = new TextDumper(file_path, new_call);
                     txtDumper.dump(txtParser.parse());
+                    txtParser.parse();
+                    if(containsOption(args, "-pretty") && pretty_file.matches("-")) {
+                        PrettyPrinter prettyPrinter = new PrettyPrinter(val.name);
+                        prettyPrinter.dump(txtParser.sorted());
+                    } else {
+                        PrettyPrinter prettyPrinter = new PrettyPrinter(pretty_file,val.name);
+                        prettyPrinter.dump(txtParser.sorted());
+                    }
 
                 } else {
                     txtParser.parse();
@@ -143,10 +157,10 @@ public class Project3 {
                 e.printStackTrace();
             }
             if (containsOption(args, "-print")) {
-                new PhoneBill(name);
-                PhoneBill bill;
+                PhoneBill bill = new  PhoneBill(name);
                 try {
-                    bill = (PhoneBill) txtParser.parse();
+                    TextParser txtParser1 = new TextParser(file_path, name);
+                    bill = (PhoneBill) txtParser1.parse();
                     Collection<PhoneCall> phoneCall = bill.getPhoneCalls();
                     for (PhoneCall c : phoneCall) System.out.println(c);
                 } catch (ParserException e) {

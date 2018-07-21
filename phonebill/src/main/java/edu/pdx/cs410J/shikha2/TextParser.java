@@ -5,6 +5,7 @@ import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
 
@@ -49,7 +50,6 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
         }
 
         Collection<PhoneCall> calls = new ArrayList<>();
-        Map<Integer, List<String>> map = new HashMap<Integer, List<String>>();
 
         for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
             Integer key = entry.getKey();
@@ -59,7 +59,7 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
                 String[] end_date   = values.get(4).split(" ");
                 // the values of the file are passed to the validation class.
                 // passing cusotmer name as an argument from file.
-                Validation val  = new Validation(values.get(0), values.get(1), values.get(2), start_date[0], start_date[1], start_date[2], end_date[0], end_date[1], end_date[2]);
+                Validation val  = new Validation(values.get(0), values.get(1), values.get(2), start_date[0], start_date[1], end_date[0], end_date[1],start_date[2], end_date[2]);
                 PhoneCall  call = new PhoneCall(val);
                 ((ArrayList<PhoneCall>) calls).add(call);
             } else {
@@ -74,7 +74,33 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
             bill.addPhoneCall(c);
         }
 
+        return bill;
+    }
 
+    public AbstractPhoneBill sorted() throws ParserException {
+        List<ArrayList<String>> sortedbill = new ArrayList<ArrayList<String>>();
+        for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
+            Integer      key    = entry.getKey();
+            List<String> values = entry.getValue();
+            sortedbill.add(new ArrayList<String>(values));
+        }
+        Collections.sort(sortedbill, Comparator.comparing(o -> o.get(3)));
+        Collections.sort(sortedbill, Comparator.comparing(o -> o.get(1)));
+
+        Collection<PhoneCall> calls = new ArrayList<>();
+
+        for (int i = 0; i < sortedbill.size(); i++) {
+            String[] start_date = sortedbill.get(i).get(3).split(" ");
+            String[] end_date   = sortedbill.get(i).get(4).split(" ");
+            Validation val  = new Validation(sortedbill.get(i).get(0), sortedbill.get(i).get(1),sortedbill.get(i).get(2),start_date[0], start_date[1], end_date[0], end_date[1],start_date[2], end_date[2]);
+            PhoneCall  call = new PhoneCall(val);
+            ((ArrayList<PhoneCall>) calls).add(call);
+        }
+
+        PhoneBill bill = new PhoneBill(customer_name);
+        for (PhoneCall c: calls) {
+            bill.addPhoneCall(c);
+        }
 
         return bill;
     }

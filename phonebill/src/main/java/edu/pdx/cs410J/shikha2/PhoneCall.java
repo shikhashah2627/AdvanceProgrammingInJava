@@ -8,13 +8,16 @@ import java.util.Date;
 public class PhoneCall extends AbstractPhoneCall {
 
     String Caller_number, Callee_number, formatted_start_time, formatted_end_time;
-    Date getStartTime, getEndTime;
+    Date getStartTime1, getEndTime1;
 
     public PhoneCall(Validation val) {
        this.Caller_number =  val.caller_number;
        this.Callee_number = val.callee_number;
-       this.getStartTime = val.start_date;
-       this.getEndTime = val.end_date;
+       SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:m a");
+       this.getStartTime1 = val.start_date;
+       this.getEndTime1 = val.end_date;
+       this.formatted_start_time = sdf.format(getStartTime1).toLowerCase();
+       this.formatted_end_time = sdf.format(getEndTime1).toLowerCase();
     }
 
     @Override
@@ -38,7 +41,7 @@ public class PhoneCall extends AbstractPhoneCall {
      */
     @Override
     public Date getStartTime() {
-        return getStartTime;
+        return getStartTime1;
     }
 
     /**
@@ -46,11 +49,7 @@ public class PhoneCall extends AbstractPhoneCall {
      * was originated.
      */
     @Override
-    public String getStartTimeString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:m a");
-        this.formatted_start_time = sdf.format(getStartTime).toLowerCase();
-        return formatted_start_time;
-    }
+    public String getStartTimeString() { return formatted_start_time; }
 
     /**
      * The following overriden function <code>getEndTimeString</code> returns the end call date and time 
@@ -58,7 +57,7 @@ public class PhoneCall extends AbstractPhoneCall {
      * @return end time of the call.
      */
     @Override
-    public Date getEndTime() { return getEndTime; }
+    public Date getEndTime() { return getEndTime1; }
 
     /**
      * Returns a textual representation of the time that this phone call
@@ -66,8 +65,6 @@ public class PhoneCall extends AbstractPhoneCall {
      */
     @Override
     public String getEndTimeString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:m a");
-        this.formatted_end_time = sdf.format(getEndTime).toLowerCase();
         return formatted_end_time;
     }
 
