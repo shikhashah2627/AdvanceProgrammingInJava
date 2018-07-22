@@ -45,7 +45,7 @@ public class PrettyPrinter implements PhoneBillDumper {
                 System.out.println(c + " for " + time_consumed + " minutes.");
             }
         } else {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file_name, true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file_name, false));
             for (PhoneCall c : phoneCall) {
                 List<String> args_method = new ArrayList<String>();
                 args_method.add(bill.getCustomer()); // adding customer name
