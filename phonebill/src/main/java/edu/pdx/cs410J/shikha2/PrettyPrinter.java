@@ -65,7 +65,7 @@ public class PrettyPrinter implements PhoneBillDumper {
                 List<String> values = entry.getValue();
                 //writer.write(String.join(",", values) + "\n");
                 writer.write("Phone call from " + values.get(1) + " to " + values.get(2) + " from " + values.get(3) + " to " +
-                        values.get(4) + " for " + values.get(5) + " minutes." + "\n");
+                        values.get(4) + " lasted for " + values.get(5) + " minutes." + "\n");
             }
             writer.close();
         }
