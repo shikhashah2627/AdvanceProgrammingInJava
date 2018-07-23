@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.shikha2;
 
+import com.sun.jdi.Field;
 import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.ParserException;
 
@@ -23,6 +24,26 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
     public TextParser(String filename,String customer_name) {
         this.filename = filename;
         this.customer_name = customer_name;
+        try {
+            File   f                  = new File(filename);
+            String file_relative_path = f.getCanonicalPath();
+            f = new File(file_relative_path);
+            if (f.getName().toLowerCase().endsWith(".txt")) {
+                if (f.exists()) {
+                    if (f.length() == 0.0 && f.isFile()) {
+                        System.out.println("It highly inappropriate, since either file does not exist or size is 0.");
+                        System.exit(0);
+                    }
+                }
+
+            } else {
+                System.out.println("File name not appropriate.");
+                System.exit(0);
+            }
+        } catch (IOException e) {
+            System.out.println("Exception Occurred:");
+            System.exit(0);
+        }
 
     }
 
@@ -84,8 +105,9 @@ public class TextParser implements edu.pdx.cs410J.PhoneBillParser {
             List<String> values = entry.getValue();
             sortedbill.add(new ArrayList<String>(values));
         }
-        Collections.sort(sortedbill, Comparator.comparing(o -> o.get(3)));
-        Collections.sort(sortedbill, Comparator.comparing(o -> o.get(1)));
+
+        //sorting the bill first with start time and then phone numbers
+        sortedbill.sort(Comparator.comparing((List<String> l) -> l.get(3)).thenComparing(l -> l.get(1)));
 
         Collection<PhoneCall> calls = new ArrayList<>();
 

@@ -9,35 +9,13 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class Project3 {
-    static final String README = "Author for Project 2: PhoneCall Project is : Shikha Shah. " + "\n" +
+    static final String README = "Author for Project 3: PhoneCall Project is : Shikha Shah. " + "\n" +
             "This project takes the command line argument of customer name , phone number of caller and callee and date and time from start to end" +
             "You can also print the the args by specifying -print option before passing the argument. " + "\n" + "Adding to that now " +
-            "there is an option to read the bill from text file or append the exisitng bill with new phone call by providing -textFile option.";
+            "there is an option to read the bill from text file or append the existing bill with new phone call by providing -textFile option." +
+            "Adding to Project 2, now you can get user friendly data in a sorted manner by providing -pretty and if you want it in file provide 'filename' or if stadnard out "+
+            "just provide '-' after -pretty command.";
 
-    /** <code>Check File</code> checks if the file exists and if not creates it.
-     * @param file_path
-     */
-    public static void check_file(String file_path) {
-        try {
-            File f = new File(file_path);
-            String file_relative_path = f.getCanonicalPath();
-            f = new File(file_relative_path);
-            if(f.getName().toLowerCase().endsWith(".txt")) {
-                if (f.exists() && f.length() == 0.0 && f.isFile()) {
-                    System.out.println("It highly inappropriate, since either file does not exist or size is 0.");
-                    System.exit(0);
-                } else {
-                    f.createNewFile();
-                }
-            }   else {
-                System.out.println("File name not appropriate.");
-                System.exit(0);
-            }
-        } catch (IOException e) {
-            System.out.println("Exception Occurred:");
-            System.exit(0);
-        }
-    }
 
     /**
      * <code>main</code>
@@ -50,7 +28,7 @@ public class Project3 {
 
         String name, caller_number, callee_number, start_date, start_time, end_date, end_time, file_path, start_AMorPM, end_AMorPM,pretty_file;
         name = caller_number = callee_number = start_date = start_time = end_date = end_time = file_path = start_AMorPM = end_AMorPM = pretty_file = null;
-
+        Boolean x = false;
         if (args.length == 0) {
             System.err.println("Missing command line arguments");
             System.exit(1);
@@ -69,16 +47,14 @@ public class Project3 {
                     System.exit(0);
                 }
             }
-            if(arg.matches("-pretty")) continue;
+            if(arg.matches("-pretty")) {
+                x = true;
+                continue;
+            }
 
-            if (containsOption(args, "-pretty") && pretty_file == null) {
+            if (containsOption(args, "-pretty") && pretty_file == null && x) {
                 pretty_file = arg;
-                if (arg.matches("-")){
-                    continue;
-                } else {
-                    check_file(pretty_file);
-                    continue;
-                }
+                continue;
             }
             if (arg.matches("-print")) {
                 continue;
@@ -88,7 +64,7 @@ public class Project3 {
             }
             if (containsOption(args, "-textFile") && file_path == null) {
                 file_path = arg;
-                check_file(file_path);
+                //check_file(file_path);
                 continue;
             }
 
@@ -138,12 +114,14 @@ public class Project3 {
                 if (caller_number != null) {
 
                     TextDumper txtDumper = new TextDumper(file_path, new_call);
+                    TextDumper.check_file(file_path);
                     txtDumper.dump(txtParser.parse());
                     txtParser.parse();
+
                     if(containsOption(args, "-pretty") && pretty_file.matches("-")) {
                         PrettyPrinter prettyPrinter = new PrettyPrinter(val.name);
                         prettyPrinter.dump(txtParser.sorted());
-                    } else {
+                    } else if(containsOption(args, "-pretty") && pretty_file != ""){
                         PrettyPrinter prettyPrinter = new PrettyPrinter(pretty_file,val.name);
                         prettyPrinter.dump(txtParser.sorted());
                     }

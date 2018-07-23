@@ -23,6 +23,31 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
         this.call = call;
     }
 
+    /** <code>Check File</code> checks if the file exists and if not creates it.
+     * @param file_path
+     */
+
+    public static void check_file(String file_path) {
+        try {
+            File   f                  = new File(file_path);
+            String file_relative_path = f.getCanonicalPath();
+            f = new File(file_relative_path);
+            if (f.getName().toLowerCase().endsWith(".txt")) {
+                if (f.exists() && f.length() == 0.0 && f.isFile()) {
+                    System.out.println("It highly inappropriate, since either file does not exist or size is 0.");
+                    System.exit(0);
+                } else {
+                    f.createNewFile();
+                }
+            } else {
+                System.out.println("File name not appropriate.");
+                System.exit(0);
+            }
+        } catch (IOException e) {
+            System.out.println("Exception Occurred:");
+            System.exit(0);
+        }
+    }
 
     /**
      * <code>Dump</code>

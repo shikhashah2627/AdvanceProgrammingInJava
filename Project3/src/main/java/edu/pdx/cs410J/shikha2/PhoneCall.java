@@ -13,7 +13,7 @@ public class PhoneCall extends AbstractPhoneCall {
     public PhoneCall(Validation val) {
        this.Caller_number =  val.caller_number;
        this.Callee_number = val.callee_number;
-       SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:m a");
+       SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
        this.getStartTime1 = val.start_date;
        this.getEndTime1 = val.end_date;
        this.formatted_start_time = sdf.format(getStartTime1).toLowerCase();

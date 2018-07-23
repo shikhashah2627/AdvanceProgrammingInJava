@@ -4,6 +4,7 @@ import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.PhoneBillDumper;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
@@ -22,7 +23,27 @@ public class PrettyPrinter implements PhoneBillDumper {
     public PrettyPrinter(String file_path, String customer_name) {
         this.file_name = file_path;
         this.customer_name = customer_name;
+        try {
+            File   f                  = new File(file_path);
+            String file_relative_path = f.getCanonicalPath();
+            f = new File(file_relative_path);
+            if (f.getName().toLowerCase().endsWith(".txt")) {
+                if (f.exists() && f.length() == 0.0 && f.isFile()) {
+                    System.out.println("It highly inappropriate, since either file does not exist or size is 0.");
+                    System.exit(0);
+                } else {
+                    f.createNewFile();
+                }
+            } else {
+                System.out.println("File name not appropriate.");
+                System.exit(0);
+            }
+        } catch (IOException e) {
+            System.out.println("Exception Occurred:");
+            System.exit(0);
+        }
     }
+
 
     /**
      * Dumps a phone bill to some destination.
@@ -36,7 +57,6 @@ public class PrettyPrinter implements PhoneBillDumper {
 
         Collection<PhoneCall> phoneCall  = bill.getPhoneCalls();
         int                   call_count = 1;
-
 
         if (this.file_name == "") {
             for (PhoneCall c : phoneCall) {

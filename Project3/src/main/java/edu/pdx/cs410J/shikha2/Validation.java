@@ -1,16 +1,8 @@
 package edu.pdx.cs410J.shikha2;
 
-import org.junit.Assert;
-
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class Validation {
     String name, caller_number, callee_number, start_date_time, end_date_time;
@@ -53,7 +45,7 @@ public class Validation {
 
             boolean parsed = false;
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy h:m a");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
                 start_date_time = Start_Date + " " + Start_Time + " " + start_AMorPM;
                 end_date_time = End_Date + " " + End_time + " " + end_AMorPM;
                 sdf.setLenient(false);
