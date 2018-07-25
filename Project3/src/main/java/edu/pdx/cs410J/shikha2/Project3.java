@@ -103,6 +103,18 @@ public class Project3 {
             }
         }
 
+        if (name == null) {
+            printErrorMessageAndExit("Missing name argument");
+        } else if (caller_number == null) {
+            printErrorMessageAndExit("Missing caller_number argument");
+        } else if (callee_number == null) {
+            printErrorMessageAndExit("Missing callee_number argument");
+        } else if (start_time == null) {
+            printErrorMessageAndExit("Missing start_time argument");
+        } else if (end_time == null) {
+            printErrorMessageAndExit("Missing end_time argument");
+        }
+
 
         Validation val = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time, start_AMorPM, end_AMorPM);
         PhoneCall  new_call  = new PhoneCall(val);
@@ -168,6 +180,16 @@ public class Project3 {
      */
     private static boolean containsOption(String[]args, String option){
         return Arrays.stream(args).anyMatch(s -> s.equals(option));
+    }
+
+    /**
+     * <code>printErrorMessageAndExit</code>checks if any null value
+     * @param s
+     */
+
+    private static void printErrorMessageAndExit(String s) {
+        System.err.println(s);
+        System.exit(0);
     }
 }
 
