@@ -13,6 +13,10 @@ public class PhoneCall extends AbstractPhoneCall {
     String Caller_number, Callee_number, formatted_start_time, formatted_end_time;
     Date getStartTime1, getEndTime1;
 
+    /**
+     * Assigns caller numberm callee number, start time and end time obtained from validation class after validation.
+     * @param val
+     */
     public PhoneCall(Validation val) {
        this.Caller_number =  val.caller_number;
        this.Callee_number = val.callee_number;
@@ -34,6 +38,10 @@ public class PhoneCall extends AbstractPhoneCall {
         }
     }
 
+    /**
+     * The following overriden function <code>getCaller</code> returns the caller number passed from command line argument.
+     * @return Caller number
+     */
     @Override
     public String getCaller() {
         return Caller_number;

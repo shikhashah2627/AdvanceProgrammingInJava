@@ -15,10 +15,22 @@ public class PrettyPrinter implements PhoneBillDumper {
 
     String file_name,customer_name;
 
+    /**
+     * <code>PrettyPrinter</code> constructor with only one parameter.
+     * If output is required as standard output and hence file name is set as null.
+     * @param customer_name
+     */
     public PrettyPrinter(String customer_name) {
         this.file_name = "";
         this.customer_name = customer_name;
     }
+
+    /**
+     * <code>PrettyPrinter</code> constructor with 2 parameters
+     * that helps to assign the file name and customer name passed from main Project.
+     * @param file_path - name of the file name if text file is required to print the output.
+     * @param customer_name - customer name.
+     */
 
     public PrettyPrinter(String file_path, String customer_name) {
         this.file_name = file_path;
