@@ -113,6 +113,8 @@ public class Project3 {
             printErrorMessageAndExit("Missing start_time argument");
         } else if (end_time == null) {
             printErrorMessageAndExit("Missing end_time argument");
+        } else if (start_AMorPM == null || end_AMorPM == null) {
+            printErrorMessageAndExit("Didn't Provide AM or PM as per the requirement.");
         }
 
 
