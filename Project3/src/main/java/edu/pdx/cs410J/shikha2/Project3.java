@@ -134,6 +134,7 @@ public class Project3 {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            /*
             if (containsOption(args, "-print")) {
                 PhoneBill bill = new  PhoneBill(name);
                 try {
@@ -145,13 +146,14 @@ public class Project3 {
                     e.printStackTrace();
                 }
             }
-        } else {
-            if (containsOption(args, "-print")) {
-                PhoneBill bill = new PhoneBill(name);
-                bill.addPhoneCall(new_call);
-                System.out.println("Caller Information for customer : " + bill.getCustomer() + " is: " + new_call.toString());
-            }
+        } else {*/
 
+        }
+
+        if (containsOption(args, "-print")) {
+            PhoneBill bill = new PhoneBill(name);
+            bill.addPhoneCall(new_call);
+            System.out.println("\n" + "New Caller Information for customer : " + bill.getCustomer() + " is: " + new_call.toString());
         }
 
 

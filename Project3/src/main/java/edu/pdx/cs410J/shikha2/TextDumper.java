@@ -3,6 +3,7 @@ package edu.pdx.cs410J.shikha2;
 import edu.pdx.cs410J.AbstractPhoneBill;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,8 +66,12 @@ public class TextDumper implements edu.pdx.cs410J.PhoneBillDumper {
         args_method.add(bill.getCustomer()); // adding customer name
         args_method.add(call.Caller_number); // adding caller number
         args_method.add(call.Callee_number); // adding callee number
-        args_method.add(call.formatted_start_time); // adding start time
-        args_method.add(call.formatted_end_time); // adding end time
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+        String start_time,end_time;
+        start_time = sdf.format(call.getStartTime1).toLowerCase();
+        end_time = sdf.format(call.getEndTime1).toLowerCase();
+        args_method.add(start_time); // adding start time
+        args_method.add(end_time); // adding end time
 
         bill.addPhoneCall(call);
         map.put(size_bill + 1, args_method);

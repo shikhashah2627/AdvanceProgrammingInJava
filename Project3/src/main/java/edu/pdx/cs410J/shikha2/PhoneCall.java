@@ -2,8 +2,11 @@ package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.AbstractPhoneCall;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class PhoneCall extends AbstractPhoneCall {
 
@@ -16,8 +19,19 @@ public class PhoneCall extends AbstractPhoneCall {
        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
        this.getStartTime1 = val.start_date;
        this.getEndTime1 = val.end_date;
-       this.formatted_start_time = sdf.format(getStartTime1).toLowerCase();
-       this.formatted_end_time = sdf.format(getEndTime1).toLowerCase();
+       DateFormat dfm = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+       // below part returns date time in short format
+        try {
+            Date start_date = dfm.parse(sdf.format(getStartTime1).toLowerCase());
+
+            this.formatted_start_time = DateFormat.getDateTimeInstance(
+                    DateFormat.SHORT, DateFormat.SHORT).format(start_date).toLowerCase();
+            Date end_date = dfm.parse(sdf.format(getEndTime1).toLowerCase());
+            this.formatted_end_time = DateFormat.getDateTimeInstance(
+                    DateFormat.SHORT, DateFormat.SHORT).format(end_date).toLowerCase();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

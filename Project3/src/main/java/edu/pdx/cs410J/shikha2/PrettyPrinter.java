@@ -58,34 +58,47 @@ public class PrettyPrinter implements PhoneBillDumper {
         Collection<PhoneCall> phoneCall  = bill.getPhoneCalls();
         int                   call_count = 1;
 
+        for (PhoneCall c : phoneCall) {
+            List<String> args_method = new ArrayList<String>();
+            args_method.add(bill.getCustomer()); // adding customer name
+            args_method.add(c.Caller_number); // adding caller number
+            args_method.add(c.Callee_number); // adding callee number
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+            String start_time,end_time;
+            start_time = sdf.format(c.getStartTime1).toLowerCase();
+            end_time = sdf.format(c.getEndTime1).toLowerCase();
+            args_method.add(start_time); // adding start time
+            args_method.add(end_time); // adding end time
+            long time_consumed = c.getEndTime1.getTime() - c.getStartTime1.getTime();
+            time_consumed = time_consumed / (1000 * 60);
+            args_method.add(Long.toString(time_consumed));
+            map.put(call_count, args_method);
+            call_count++;
+
+        }
+
         if (this.file_name == "") {
-            for (PhoneCall c : phoneCall) {
-                long time_consumed = c.getEndTime1.getTime() - c.getStartTime1.getTime();
-                time_consumed = time_consumed / (1000 * 60);
-                System.out.println(c + " for " + time_consumed + " minutes.");
+            System.out.println("Pretty Print Standard output: " + '\n');
+            for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
+                Integer      key    = entry.getKey();
+                List<String> values = entry.getValue();
+                System.out.println("Phone call from " + values.get(1) + " to " + values.get(2) + " from " + values.get(3) + " to " +
+                        values.get(4) + " lasted for " + values.get(5) + " minutes." );
             }
         } else {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file_name, false));
-            for (PhoneCall c : phoneCall) {
-                List<String> args_method = new ArrayList<String>();
-                args_method.add(bill.getCustomer()); // adding customer name
-                args_method.add(c.Caller_number); // adding caller number
-                args_method.add(c.Callee_number); // adding callee number
-                args_method.add(c.formatted_start_time); // adding start time
-                args_method.add(c.formatted_end_time); // adding end time
-                long time_consumed = c.getEndTime1.getTime() - c.getStartTime1.getTime();
-                time_consumed = time_consumed / (1000 * 60);
-                args_method.add(Long.toString(time_consumed));
-                map.put(call_count, args_method);
-                call_count++;
 
-            }
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file_name, false));
+
             for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
                 Integer      key    = entry.getKey();
                 List<String> values = entry.getValue();
                 //writer.write(String.join(",", values) + "\n");
-                writer.write("Phone call from " + values.get(1) + " to " + values.get(2) + " from " + values.get(3) + " to " +
-                        values.get(4) + " lasted for " + values.get(5) + " minutes." + "\n");
+                try {
+                    writer.write("Phone call from " + values.get(1) + " to " + values.get(2) + " from " + values.get(3) + " to " +
+                            values.get(4) + " lasted for " + values.get(5) + " minutes." + "\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             writer.close();
         }
