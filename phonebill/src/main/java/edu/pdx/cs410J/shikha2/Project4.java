@@ -62,8 +62,9 @@ public class Project4 {
         try {
             if (word == null) {
                 // Print all word/definition pairs
-                Map<String, String> dictionary = client.getAllDictionaryEntries();
-                StringWriter sw = new StringWriter();
+                String              customerName = "abc";
+                Map<String, String> dictionary = client.getPhoneBill(customerName);
+                StringWriter        sw         = new StringWriter();
                 Messages.formatDictionaryEntries(new PrintWriter(sw, true), dictionary);
                 message = sw.toString();
 

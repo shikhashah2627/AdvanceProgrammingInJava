@@ -2,6 +2,7 @@ package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.web.HttpRequestHelper;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -20,6 +21,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class PhoneBillRestClientIT {
   private static final String HOSTNAME = "localhost";
   private static final String PORT = System.getProperty("http.port", "8080");
+  private String customerName;
 
   private PhoneBillRestClient newPhoneBillRestClient() {
     int port = Integer.parseInt(PORT);
@@ -32,19 +34,24 @@ public class PhoneBillRestClientIT {
     client.removeAllDictionaryEntries();
   }
 
-  @Test
-  public void test1EmptyServerContainsNoDictionaryEntries() throws IOException {
+  @Test(expected = NoSuchPhoneBillException.class)
+  public void test1EmptyServerThrowsNoPhoneBill() throws IOException {
     PhoneBillRestClient client = newPhoneBillRestClient();
-    Map<String, String> dictionary = client.getAllDictionaryEntries();
-    assertThat(dictionary.size(), equalTo(0));
+    client.getPhoneBill(customerName);
   }
 
+  @Ignore
   @Test
-  public void test2DefineOneWord() throws IOException {
-    PhoneBillRestClient client = newPhoneBillRestClient();
-    String testWord = "TEST WORD";
-    String testDefinition = "TEST DEFINITION";
-    client.addDictionaryEntry(testWord, testDefinition);
+  public void test2AddOnePhoneCall() throws IOException {
+    PhoneBillRestClient client         = newPhoneBillRestClient();
+    String              Caller_Number = "123-456-7890";
+    String      name = "shikha shah";
+    String     Callee_Number="123-545-6743";
+    Validation val            = new val(name,Caller_Number,Callee_Number, "11/11/2012", "12:34", "11/14/2012", "11:11" , "PM", "AM");
+    PhoneCall  call           = new call(val);
+    String     testWord       = "TEST WORD";
+    String     testDefinition = "TEST DEFINITION";
+    client.addPhoneCall(testWord, call);
 
     String definition = client.getDefinition(testWord);
     assertThat(definition, equalTo(testDefinition));

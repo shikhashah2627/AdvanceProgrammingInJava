@@ -34,9 +34,10 @@ public class PhoneBillRestClient extends HttpRequestHelper
     /**
      * Returns all dictionary entries from the server
      */
-    public Map<String, String> getAllDictionaryEntries() throws IOException {
+    public Map<String, String> getPhoneBill(String customerName) throws IOException {
       Response response = get(this.url);
-      return Messages.parseDictionary(response.getContent());
+      throw new NoSuchPhoneBillException(customerName);
+      //return Messages.parseDictionary(response.getContent());
     }
 
     /**
@@ -70,6 +71,9 @@ public class PhoneBillRestClient extends HttpRequestHelper
         throw new PhoneBillRestException(code);
       }
       return response;
+    }
+
+    public void addPhoneCall(String customerName, PhoneCall call) {
     }
 
     private class PhoneBillRestException extends RuntimeException {
