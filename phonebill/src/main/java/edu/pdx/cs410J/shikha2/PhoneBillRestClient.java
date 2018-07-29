@@ -32,7 +32,7 @@ public class PhoneBillRestClient extends HttpRequestHelper
     }
 
     /**
-     * Returns all dictionary entries from the server
+     * Returns all phone call entries from the server
      */
     public Map<String, String> getPhoneBill(String customerName) throws IOException {
       Response response = get(this.url);
@@ -73,13 +73,35 @@ public class PhoneBillRestClient extends HttpRequestHelper
       return response;
     }
 
-    public void addPhoneCall(String customerName, PhoneCall call) {
+    public void addPhoneCall(String customerName, PhoneCall call) throws IOException {
+        String[] postParameters = {
+                "customer", customerName,
+                "caller", call.getCaller(),
+                "callee", call.getCallee(),
+                "startTime", String.valueOf(call.getStartTime().getTime()),
+                "endTime", String.valueOf(call.getEndTime().getTime()),
+        };
+
+        Response response = postToMyURL(postParameters);
+        throwExceptionIfNotOkayHttpStatus(response);
+    }
+
+
+    public String getPrettyPhoneBill(String customer) throws IOException {
+        Response response = get(this.url, "customer", customer);
+        throwExceptionIfNotOkayHttpStatus(response);
+        return response.getContent();
     }
 
     private class PhoneBillRestException extends RuntimeException {
       public PhoneBillRestException(int httpStatusCode) {
         super("Got an HTTP Status Code of " + httpStatusCode);
       }
+    }
+
+    public void removeAllPhoneBills() throws IOException {
+        Response response = delete(this.url);
+        throwExceptionIfNotOkayHttpStatus(response);
     }
 
 }

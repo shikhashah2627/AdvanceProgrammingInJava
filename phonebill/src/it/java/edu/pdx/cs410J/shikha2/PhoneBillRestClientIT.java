@@ -2,13 +2,11 @@ package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.web.HttpRequestHelper;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -40,21 +38,22 @@ public class PhoneBillRestClientIT {
     client.getPhoneBill(customerName);
   }
 
-  @Ignore
   @Test
   public void test2AddOnePhoneCall() throws IOException {
-    PhoneBillRestClient client         = newPhoneBillRestClient();
+    PhoneBillRestClient client        = newPhoneBillRestClient();
     String              Caller_Number = "123-456-7890";
-    String      name = "shikha shah";
-    String     Callee_Number="123-545-6743";
-    Validation val            = new val(name,Caller_Number,Callee_Number, "11/11/2012", "12:34", "11/14/2012", "11:11" , "PM", "AM");
-    PhoneCall  call           = new call(val);
-    String     testWord       = "TEST WORD";
-    String     testDefinition = "TEST DEFINITION";
-    client.addPhoneCall(testWord, call);
+      String            name          = "customer";
+    String              Callee_Number ="123-545-6743";
+      Validation        val           = new Validation(name, Caller_Number, Callee_Number, "11/11/2012", "12:34", "11/14/2012", "11:11", "PM", "AM");
+      PhoneCall         phoneCall     = new PhoneCall(val);
 
-    String definition = client.getDefinition(testWord);
-    assertThat(definition, equalTo(testDefinition));
+      String customer = "Customer";
+      client.addPhoneCall(customer, phoneCall);
+
+      String pretty = client.getPrettyPhoneBill(customer);
+      assertThat(pretty, containsString(customer));
+      //assertThat(pretty, containsString(callerNumber));
+      //assertThat(pretty, containsString(calleeNumber));
   }
 
   @Test

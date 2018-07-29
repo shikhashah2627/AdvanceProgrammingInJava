@@ -14,7 +14,7 @@ public class Messages
 {
     public static String formatWordCount(int count )
     {
-        return String.format( "Dictionary on server contains %d words", count );
+        return String.format("Phone Bill on server contains %d calls", count);
     }
 
     public static String formatDictionaryEntry(String word, String definition )
@@ -33,7 +33,7 @@ public class Messages
     }
 
     public static String allDictionaryEntriesDeleted() {
-        return "All dictionary entries have been deleted";
+        return "All Phone Call entries have been deleted";
     }
 
     public static Map.Entry<String, String> parseDictionaryEntry(String content) {

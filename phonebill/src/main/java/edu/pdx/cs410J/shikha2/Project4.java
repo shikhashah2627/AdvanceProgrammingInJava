@@ -4,9 +4,6 @@ import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Map;
 
 /**
  * The main class that parses the command line and communicates with the
@@ -60,23 +57,10 @@ public class Project4 {
 
         String message;
         try {
-            if (word == null) {
-                // Print all word/definition pairs
+
                 String              customerName = "abc";
-                Map<String, String> dictionary = client.getPhoneBill(customerName);
-                StringWriter        sw         = new StringWriter();
-                Messages.formatDictionaryEntries(new PrintWriter(sw, true), dictionary);
-                message = sw.toString();
+            message = client.getPrettyPhoneBill(customerName);
 
-            } else if (definition == null) {
-                // Print all dictionary entries
-                message = Messages.formatDictionaryEntry(word, client.getDefinition(word));
-
-            } else {
-                // Post the word/definition pair
-                client.addDictionaryEntry(word, definition);
-                message = Messages.definedWordAs(word, definition);
-            }
 
         } catch ( IOException ex ) {
             error("While contacting server: " + ex);
@@ -121,14 +105,14 @@ public class Project4 {
         err.println("usage: java Project4 host port [word] [definition]");
         err.println("  host         Host of web server");
         err.println("  port         Port of web server");
-        err.println("  word         Word in dictionary");
-        err.println("  definition   Definition of word");
+        err.println("  call         call in bill");
+        err.println("  bill   Definition of call");
         err.println();
-        err.println("This simple program posts words and their definitions");
+        err.println("This simple program posts bill and their calls");
         err.println("to the server.");
-        err.println("If no definition is specified, then the word's definition");
+        err.println("If specific search time is specified, then the word's definition");
         err.println("is printed.");
-        err.println("If no word is specified, all dictionary entries are printed");
+        err.println("If no search time is specified, all entries are printed");
         err.println();
 
         System.exit(1);
