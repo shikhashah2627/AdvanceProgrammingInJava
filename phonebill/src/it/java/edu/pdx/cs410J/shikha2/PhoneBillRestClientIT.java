@@ -42,12 +42,12 @@ public class PhoneBillRestClientIT {
   public void test2AddOnePhoneCall() throws IOException {
     PhoneBillRestClient client        = newPhoneBillRestClient();
     String              Caller_Number = "123-456-7890";
-      String            name          = "customer";
-    String              Callee_Number ="123-545-6743";
-      Validation        val           = new Validation(name, Caller_Number, Callee_Number, "11/11/2012", "12:34", "11/14/2012", "11:11", "PM", "AM");
+      String            customer      = "Customer";
+      String            Callee_Number = "123-545-6743";
+      Validation        val           = new Validation(customer, Caller_Number, Callee_Number, "11/11/2012", "12:34", "11/14/2012", "11:11", "PM", "AM");
       PhoneCall         phoneCall     = new PhoneCall(val);
 
-      String customer = "Customer";
+
       client.addPhoneCall(customer, phoneCall);
 
       String pretty = client.getPrettyPhoneBill(customer);
@@ -58,9 +58,10 @@ public class PhoneBillRestClientIT {
 
   @Test
   public void test4MissingRequiredParameterReturnsPreconditionFailed() throws IOException {
-    PhoneBillRestClient client = newPhoneBillRestClient();
+    PhoneBillRestClient        client   = newPhoneBillRestClient();
     HttpRequestHelper.Response response = client.postToMyURL();
-    assertThat(response.getContent(), containsString(Messages.missingRequiredParameter("word")));
+      String                   customer = "customer";
+      assertThat(response.getContent(), containsString(Messages.missingRequiredParameter(customer)));
     assertThat(response.getCode(), equalTo(HttpURLConnection.HTTP_PRECON_FAILED));
   }
 

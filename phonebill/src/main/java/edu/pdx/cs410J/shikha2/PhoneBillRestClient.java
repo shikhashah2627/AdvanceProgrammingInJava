@@ -6,6 +6,7 @@ import edu.pdx.cs410J.web.HttpRequestHelper;
 import java.io.IOException;
 import java.util.Map;
 
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 
 /**
@@ -67,7 +68,10 @@ public class PhoneBillRestClient extends HttpRequestHelper
 
     private Response throwExceptionIfNotOkayHttpStatus(Response response) {
       int code = response.getCode();
-      if (code != HTTP_OK) {
+        if (code == HTTP_NOT_FOUND) {
+            String customer = response.getContent();
+            throw new NoSuchPhoneBillException(customer);
+        } else if (code != HTTP_OK) {
         throw new PhoneBillRestException(code);
       }
       return response;
@@ -88,7 +92,7 @@ public class PhoneBillRestClient extends HttpRequestHelper
 
 
     public String getPrettyPhoneBill(String customer) throws IOException {
-        Response response = get(this.url, "customer", customer);
+        Response response = get(this.url, "Customer_Name", customer);
         throwExceptionIfNotOkayHttpStatus(response);
         return response.getContent();
     }

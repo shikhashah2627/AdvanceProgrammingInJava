@@ -16,8 +16,8 @@ public class Project4 {
     public static void main(String... args) {
         String hostName = null;
         String portString = null;
-        String word = null;
-        String definition = null;
+        String name, caller_number, callee_number, start_date, start_time, end_date, end_time, file_path, start_AMorPM, end_AMorPM, pretty_file;
+        name = caller_number = callee_number = start_date = start_time = end_date = end_time = file_path = start_AMorPM = end_AMorPM = pretty_file = null;
 
         for (String arg : args) {
             if (hostName == null) {
@@ -26,11 +26,34 @@ public class Project4 {
             } else if ( portString == null) {
                 portString = arg;
 
-            } else if (word == null) {
-                word = arg;
-
-            } else if (definition == null) {
-                definition = arg;
+            } else if (name == null) {
+                name = arg;
+            } else if (caller_number == null) {
+                caller_number = arg;
+            } else if (callee_number == null) {
+                callee_number = arg;
+            } else if (start_date == null) {
+                start_date = arg;
+            } else if (start_time == null) {
+                start_time = arg;
+            } else if (start_AMorPM == null) {
+                if (arg.toLowerCase().matches("am") || arg.toLowerCase().matches("pm")) {
+                    start_AMorPM = arg;
+                } else {
+                    System.out.println("Your 12-hour format for start time is not specified properly!");
+                    System.exit(0);
+                }
+            } else if (end_date == null) {
+                end_date = arg;
+            } else if (end_time == null) {
+                end_time = arg;
+            } else if (end_AMorPM == null) {
+                if (arg.toLowerCase().matches("am") || arg.toLowerCase().matches("pm")) {
+                    end_AMorPM = arg;
+                } else {
+                    System.out.println("Your 12-hour format is not specified properly!");
+                    System.exit(0);
+                }
 
             } else {
                 usage("Extraneous command line argument: " + arg);
@@ -54,13 +77,15 @@ public class Project4 {
         }
 
         PhoneBillRestClient client = new PhoneBillRestClient(hostName, port);
+        PhoneBill           bill   = new PhoneBill(name);
 
         String message;
         try {
 
-                String              customerName = "abc";
-            message = client.getPrettyPhoneBill(customerName);
-
+            Validation val      = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time, start_AMorPM, end_AMorPM);
+            PhoneCall  new_call = new PhoneCall(val);
+            bill.addPhoneCall(new_call);
+            message = client.getPrettyPhoneBill(name);
 
         } catch ( IOException ex ) {
             error("While contacting server: " + ex);

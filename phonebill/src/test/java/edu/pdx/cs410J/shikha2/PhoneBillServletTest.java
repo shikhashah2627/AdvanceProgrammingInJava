@@ -2,7 +2,6 @@ package edu.pdx.cs410J.shikha2;
 
 import org.junit.Test;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -10,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Date;
 
+import static edu.pdx.cs410J.shikha2.PhoneBillServlet.CUSTOMER_PARAMETER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class PhoneBillServletTest {
 
   @Test
-  public void initiallyServletContainsNoPhoneBills() throws ServletException, IOException {
+  public void initiallyServletContainsNoPhoneBills() throws IOException {
     PhoneBillServlet servlet = new PhoneBillServlet();
 
       HttpServletRequest  mockRequest     = mock(HttpServletRequest.class);
@@ -30,7 +30,7 @@ public class PhoneBillServletTest {
 
       when(mockResponse.getWriter()).thenReturn(mockPrintWriter);
 
-      when(mockRequest.getParameter(PhoneBillServlet.CUSTOMER_PARAMETER)).thenReturn("Customer");
+    when(mockRequest.getParameter(CUSTOMER_PARAMETER)).thenReturn("Customer");
 
       servlet.doGet(mockRequest, mockResponse);
 
@@ -39,7 +39,7 @@ public class PhoneBillServletTest {
 
 
   @Test
-  public void addPhoneBill() throws ServletException, IOException {
+  public void addPhoneBill() throws IOException {
     PhoneBillServlet servlet = new PhoneBillServlet();
 
       String customer = "Customer";
@@ -79,17 +79,17 @@ public class PhoneBillServletTest {
       assertThat(call.getEndTime(), equalTo(new Date(endTime)));
   }
 
-  /*
+
   @Test
-  public void getReturnsPrettyPhoneBill() throws IOException, ServletException {
+  public void getReturnsPrettyPhoneBill() throws IOException {
     PhoneBillServlet servlet = new PhoneBillServlet();
 
-    String customer = "Customer";
-    PhoneBill bill = new PhoneBill(customer);
-    Validation val            = new val(name,Caller_Number,Callee_Number, "11/11/2012", "12:34", "11/14/2012", "11:11" , "PM", "AM");
-    PhoneCall  phoneCall           = new phoneCall(val);
+    String     customer  = "Customer";
+    PhoneBill  bill      = new PhoneBill(customer);
+    Validation val       = new Validation(customer, "123-456-7890", "122-343-4546", "11/11/2012", "12:34", "11/14/2012", "11:11", "PM", "AM");
+    PhoneCall  phoneCall = new PhoneCall(val);
 
-    bill.addPhoneCall(call);
+    bill.addPhoneCall(phoneCall);
     servlet.addPhoneBill(bill);
 
     HttpServletRequest mockRequest = mock(HttpServletRequest.class);
@@ -104,7 +104,7 @@ public class PhoneBillServletTest {
 
     verify(mockResponse).setStatus(HttpServletResponse.SC_OK);
     verify(mockPrintWriter).println(customer);
-    verify(mockPrintWriter).println(call.toString());
-  }*/
+    verify(mockPrintWriter).println(phoneCall.toString());
+  }
 
 }
