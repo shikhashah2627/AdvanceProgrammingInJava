@@ -196,4 +196,3 @@
     <jetty.http.port>8080</jetty.http.port>
   </properties>
 </project>
-
