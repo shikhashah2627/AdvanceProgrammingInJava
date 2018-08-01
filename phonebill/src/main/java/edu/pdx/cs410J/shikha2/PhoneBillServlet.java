@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,14 +19,12 @@ import java.util.Map;
  */
 public class PhoneBillServlet extends HttpServlet
 {
-    private static final String              CUSTOMER_PARAMETER   = "Customer_Name";
-    private static final String              CALLER_NUMBER        = "Caller_number";
-    private static final String              CALLEE_PARAMETER     = "Callee_number";
-    private static final String              START_DATE_PARAMETER = "Start_Date";
-    private static final String              START_TIME_PARAMETER = "Start_Time";
-    private static final String              END_DATE_PARAMETER   = "End_Date";
-    private static final String              END_TIME_PARAMETER   = "End_Time";
-    private final        Map<String, String> dictionary           = new HashMap<>();
+    static final         String                    CUSTOMER_PARAMETER        = "Customer_Name";
+    private static final String                    CALLER_NUMBER             = "Caller_number";
+    private static final String                    CALLEE_PARAMETER          = "Callee_number";
+    private static final String                    START_DATE_TIME_PARAMETER = "Start_Date_Time";
+    private static final String                    END_DATE_TIME_PARAMETER   = "End_Date_Time";
+    private final        Map<String, List<String>> call_list                 = new HashMap<>();
 
     private Map<String, PhoneBill> bills = new HashMap<>();
 
@@ -39,8 +38,31 @@ public class PhoneBillServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType( "text/plain" );
 
-        String customer = getParameter(CUSTOMER_PARAMETER, request);
-        writePrettyPhoneBill(customer, response);
+        String customer       = getParameter(CUSTOMER_PARAMETER, request);
+        String stat_Date_Time = getParameter(START_DATE_TIME_PARAMETER, request);
+        String end_Date_Time  = getParameter(END_DATE_TIME_PARAMETER, request);
+        if (stat_Date_Time == null && end_Date_Time == null) {
+            writePrettyPhoneBill(customer, response);
+        } else {
+
+            getPhoneBillFromSearch(customer, stat_Date_Time, end_Date_Time, response);
+        }
+
+
+    }
+
+    private void getPhoneBillFromSearch(String customer, String stat_date_time, String end_date_time, HttpServletResponse response) throws IOException {
+        PhoneBill bill = getPhoneBill(customer);
+        if (bill == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            PrintWriter   writer = response.getWriter();
+            PrettyPrinter pretty = new PrettyPrinter(writer);
+            pretty.dump(bill);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+
+
     }
 
     private void writePrettyPhoneBill(String customer, HttpServletResponse response) throws IOException {
@@ -61,21 +83,19 @@ public class PhoneBillServlet extends HttpServlet
      * entry to the HTTP response.
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType( "text/plain" );
 
-        String customer  = getParameter(CUSTOMER_PARAMETER, request);
-        String caller    = getParameter(CALLER_NUMBER, request);
-        String callee    = getParameter(CALLEE_PARAMETER, request);
-        String startTime = getParameter(START_TIME_PARAMETER, request);
-        String startDate = getParameter(START_DATE_PARAMETER, request);
-        String endDate   = getParameter(END_DATE_PARAMETER, request);
-        String endTime   = getParameter(END_TIME_PARAMETER, request);
+        String customer       = getParameter(CUSTOMER_PARAMETER, request);
+        String caller         = getParameter(CALLER_NUMBER, request);
+        String callee         = getParameter(CALLEE_PARAMETER, request);
+        String stat_Date_Time = getParameter(START_DATE_TIME_PARAMETER, request);
+        String end_Date_Time  = getParameter(END_DATE_TIME_PARAMETER, request);
 
-        String startTime1[] = startTime.split(" ");
-        String endTime1[]   = endTime.split(" ");
+        String startTime1[] = stat_Date_Time.split(" ");
+        String endTime1[]   = end_Date_Time.split(" ");
 
-        Validation val  = new Validation(customer, caller, callee, startDate, startTime1[0], endDate, endTime1[0], startTime1[1], endTime1[1]);
+        Validation val  = new Validation(customer, caller, callee, startTime1[0], startTime1[1], endTime1[0], endTime1[1], startTime1[2], endTime1[2]);
         PhoneCall  call = new PhoneCall(val);
 
         PhoneBill bill = getPhoneBill(customer);
@@ -84,10 +104,15 @@ public class PhoneBillServlet extends HttpServlet
             addPhoneBill(bill);
         }
 
-
         bill.addPhoneCall(call);
 
+
+        PrintWriter pw = response.getWriter();
+        pw.println(Messages.new_call_information(call.toString()));
+        pw.flush();
+
         response.setStatus( HttpServletResponse.SC_OK);
+
     }
 
 
@@ -100,7 +125,7 @@ public class PhoneBillServlet extends HttpServlet
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/plain");
 
-        this.dictionary.clear();
+        this.call_list.clear();
 
         PrintWriter pw = response.getWriter();
         pw.println(Messages.allDictionaryEntriesDeleted());
@@ -128,17 +153,18 @@ public class PhoneBillServlet extends HttpServlet
      * The text of the message is formatted with
      * {@link Messages#formatDictionaryEntry(String, String)}
      */
+    /*
     private void writeDefinition(String customer, HttpServletResponse response) throws IOException
     {
-        String definition = this.dictionary.get(customer);
+        List definition = this.call_list.get(customer);
 
         PrintWriter pw = response.getWriter();
-        pw.println(Messages.formatDictionaryEntry(customer, definition));
+        pw.println(Messages.formatDictionaryEntry(customer, definition.toString()));
 
         pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK );
-    }
+    }*/
 
     /**
      * Writes all of the dictionary entries to the HTTP response.
@@ -146,10 +172,10 @@ public class PhoneBillServlet extends HttpServlet
      * The text of the message is formatted with
      * {@link Messages#formatDictionaryEntry(String, String)}
      */
-    private void writeAllDictionaryEntries(HttpServletResponse response ) throws IOException
+    private void writeAllCallEntries(HttpServletResponse response) throws IOException
     {
         PrintWriter pw = response.getWriter();
-        Messages.formatDictionaryEntries(pw, dictionary);
+        Messages.formatDictionaryEntries(pw, call_list);
 
         pw.flush();
 

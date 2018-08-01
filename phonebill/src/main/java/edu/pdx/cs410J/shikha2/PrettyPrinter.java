@@ -3,42 +3,75 @@ package edu.pdx.cs410J.shikha2;
 import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.PhoneBillDumper;
 
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class PrettyPrinter implements PhoneBillDumper {
+public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
 
     //String file_name
-    String                     customer_name;
-    Map<Integer, List<String>> map = new HashMap<Integer, List<String>>();
+    private final PrintWriter writer;
+    Map<Integer, List<String>>   map  = new HashMap<Integer, List<String>>();
+    Map<String, PhoneCall>       map1 = new HashMap<String, PhoneCall>();
+    Map.Entry<String, PhoneCall> entry
 
+    {
+        String    key    = entry.getKey();
+        PhoneCall values = entry.getValue();
+        System.out.println(entry.getValue());
+
+    }
+
+        for(
 
     /**
      * <code>PrettyPrinter</code> constructor with only one parameter.
      * If output is required as standard output and hence file name is set as null.
      *
-     * @param customer_name
+     * @param writer
      */
-    public PrettyPrinter(String customer_name) {
-        //this.file_name = "";
-        this.customer_name = customer_name;
-    }
+    public PrettyPrinter(PrintWriter writer) {
+        this.writer = writer;
+    } :map1.entrySet())
 
-    /**
-     * Dumps a phone bill to some destination.
-     *
-     * @param bill
-     */
+    sorted(bill.getCustomer()
+
+    getPhoneCalls()).
+
+    forEach((call).
     @Override
-    public void dump(AbstractPhoneBill bill) {
+    public void dump(PhoneBill bill) {
+        writer.println(bill.getCustomer());
+        Integer               size_bill = bill.getPhoneCalls().size();
+        Collection<PhoneCall> call1     = bill.getPhoneCalls();
 
+        foreACH
+        for (Map.Entry<String, PhoneCall> entry : map1.entrySet()) {
+            String    key  = bill.getCustomer();
+            PhoneCall call = bill.getPhoneCalls().;
+            map1.put(key, call);
+        }
+    } ->writer.println(call.toString()))
+    //bill.getPhoneCalls().forEach((call) -> writer.println(call.toString()));
     }
 
-    public AbstractPhoneBill sorted() {
+    public AbstractPhoneBill sorted(String Customer_name) {
         List<ArrayList<String>> sortedbill = new ArrayList<ArrayList<String>>();
-        for (Map.Entry<Integer, List<String>> entry : map.entrySet()) {
-            Integer      key    = entry.getKey();
-            List<String> values = entry.getValue();
-            sortedbill.add(new ArrayList<String>(values));
+        SimpleDateFormat        sdf        = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+        String                  start_time, end_time;
+
+        for (Map.Entry<String, PhoneCall> entry : map1.entrySet()) {
+            String    key    = entry.getKey();
+            PhoneCall values = entry.getValue();
+            start_time = sdf.format(values.getStartTime1).toLowerCase();
+            end_time = sdf.format(values.getEndTime1).toLowerCase();
+            List<String> values_required = new ArrayList<String>();
+            values_required.add(values.Caller_number);
+            values_required.add(values.Callee_number);
+            values_required.add(start_time);
+            values_required.add(end_time);
+            sortedbill.add(new ArrayList<String>(values_required));
+
         }
 
         //sorting the bill first with start time and then phone numbers
@@ -54,7 +87,7 @@ public class PrettyPrinter implements PhoneBillDumper {
             calls.add(call);
         }
 
-        PhoneBill bill = new PhoneBill(customer_name);
+        PhoneBill bill = new PhoneBill(Customer_name);
         for (PhoneCall c : calls) {
             bill.addPhoneCall(c);
         }

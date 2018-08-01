@@ -2,6 +2,7 @@ package edu.pdx.cs410J.shikha2;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,9 +28,14 @@ public class Messages
         return String.format("The required parameter \"%s\" is missing", parameterName);
     }
 
-    public static String definedWordAs(String word, String definition )
+    /**
+     * @param new_call_information - new call details
+     * @return prints the new call information that has been added.
+     */
+
+    public static String new_call_information(String new_call_information)
     {
-        return String.format( "Defined %s as %s", word, definition );
+        return "New call information is " + new_call_information;
     }
 
     public static String allDictionaryEntriesDeleted() {
@@ -66,11 +72,11 @@ public class Messages
         };
     }
 
-    public static void formatDictionaryEntries(PrintWriter pw, Map<String, String> dictionary) {
+    public static void formatDictionaryEntries(PrintWriter pw, Map<String, List<String>> dictionary) {
         pw.println(Messages.formatWordCount(dictionary.size()));
 
-        for (Map.Entry<String, String> entry : dictionary.entrySet()) {
-            pw.println(Messages.formatDictionaryEntry(entry.getKey(), entry.getValue()));
+        for (Map.Entry<String, List<String>> entry : dictionary.entrySet()) {
+            pw.println(Messages.formatDictionaryEntry(entry.getKey(), entry.getValue().toString()));
         }
     }
 

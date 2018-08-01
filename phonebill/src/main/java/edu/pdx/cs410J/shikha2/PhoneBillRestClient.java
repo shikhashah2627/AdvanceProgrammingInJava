@@ -38,21 +38,20 @@ public class PhoneBillRestClient extends HttpRequestHelper
     public Map<String, String> getPhoneBill(String customerName) throws IOException {
       Response response = get(this.url);
       throw new NoSuchPhoneBillException(customerName);
-      //return Messages.parseDictionary(response.getContent());
     }
 
     /**
-     * Returns the definition for the given word
+     * Returns the call from the specific search start and End time
      */
-    public String getDefinition(String word) throws IOException {
-      Response response = get(this.url, "word", word);
+    public String getPhoneBillFromSearch(String Customer_Name, String Start_Date_Time, String End_Date_Time) throws IOException {
+        Response response = get(this.url, "Customer_Name", "Start_Date", "End_Date_Time", Customer_Name, Start_Date_Time, End_Date_Time);
       throwExceptionIfNotOkayHttpStatus(response);
       String content = response.getContent();
       return Messages.parseDictionaryEntry(content).getValue();
     }
 
-    public void addDictionaryEntry(String word, String definition) throws IOException {
-      Response response = postToMyURL("word", word, "definition", definition);
+    public void addCall(String Customer, PhoneCall call) throws IOException {
+        Response response = postToMyURL("word", Customer, "definition", call.toString());
       throwExceptionIfNotOkayHttpStatus(response);
     }
 

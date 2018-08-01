@@ -6,13 +6,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class PhoneCall extends AbstractPhoneCall {
 
     String Caller_number, Callee_number, formatted_start_time, formatted_end_time;
     Date getStartTime1, getEndTime1;
 
+    public PhoneCall() {
+
+    }
     /**
      * Assigns caller numberm callee number, start time and end time obtained from validation class after validation.
      * @param val
