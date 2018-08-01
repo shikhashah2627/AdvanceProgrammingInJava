@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
  */
 public class Messages
 {
+    /*
     public static String formatWordCount(int count )
     {
         return String.format("Phone Bill on server contains %d calls", count);
@@ -22,7 +23,7 @@ public class Messages
     {
         return String.format("  %s : %s", word, definition);
     }
-
+*/
     public static String missingRequiredParameter( String parameterName )
     {
         return String.format("The required parameter \"%s\" is missing", parameterName);
@@ -42,7 +43,9 @@ public class Messages
         return "All Phone Call entries have been deleted";
     }
 
-    public static Map.Entry<String, String> parseDictionaryEntry(String content) {
+        /*
+        public static Map.Entry<String, String> parseDictionaryEntry(String content) {
+
         Pattern pattern = Pattern.compile("\\s*(.*) : (.*)");
         Matcher matcher = pattern.matcher(content);
 
@@ -80,6 +83,7 @@ public class Messages
         }
     }
 
+    /*
     public static Map<String, String> parseDictionary(String content) {
         Map<String, String> map = new HashMap<>();
 
@@ -91,6 +95,6 @@ public class Messages
         }
 
         return map;
-    }
+    }*/
 
 }

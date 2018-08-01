@@ -58,7 +58,11 @@ public class PhoneBillServlet extends HttpServlet
         } else {
             PrintWriter   writer = response.getWriter();
             PrettyPrinter pretty = new PrettyPrinter(writer);
-            pretty.dump(bill);
+            PhoneBill bill1 = (PhoneBill)pretty.sorted(bill);
+            writer.println(bill.getCustomer());
+            bill1.getPhoneCalls().forEach((call) -> writer.println(call.toString()));
+
+
             response.setStatus(HttpServletResponse.SC_OK);
         }
 
@@ -170,8 +174,9 @@ public class PhoneBillServlet extends HttpServlet
      * Writes all of the dictionary entries to the HTTP response.
      *
      * The text of the message is formatted with
-     * {@link Messages#formatDictionaryEntry(String, String)}
+     * {@link Messages#//formatDictionaryEntry(String, String)}
      */
+    /*/
     private void writeAllCallEntries(HttpServletResponse response) throws IOException
     {
         PrintWriter pw = response.getWriter();

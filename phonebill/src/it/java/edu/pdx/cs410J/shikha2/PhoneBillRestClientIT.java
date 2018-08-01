@@ -36,7 +36,7 @@ public class PhoneBillRestClientIT {
   @Test(expected = NoSuchPhoneBillException.class)
   public void test1EmptyServerThrowsNoPhoneBill() throws IOException {
     PhoneBillRestClient client = newPhoneBillRestClient();
-    client.getPhoneBill(customerName);
+    //client.getPhoneBill(customerName);
   }
 
     @Ignore

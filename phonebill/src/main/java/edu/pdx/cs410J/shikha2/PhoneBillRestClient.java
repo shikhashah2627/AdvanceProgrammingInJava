@@ -32,13 +32,13 @@ public class PhoneBillRestClient extends HttpRequestHelper
         this.url = String.format( "http://%s:%d/%s/%s", hostName, port, WEB_APP, SERVLET );
     }
 
-    /**
+    /*
      * Returns all phone call entries from the server
-     */
+
     public Map<String, String> getPhoneBill(String customerName) throws IOException {
       Response response = get(this.url);
       throw new NoSuchPhoneBillException(customerName);
-    }
+    }*/
 
     /**
      * Returns the call from the specific search start and End time
@@ -47,7 +47,8 @@ public class PhoneBillRestClient extends HttpRequestHelper
         Response response = get(this.url, "Customer_Name", "Start_Date", "End_Date_Time", Customer_Name, Start_Date_Time, End_Date_Time);
       throwExceptionIfNotOkayHttpStatus(response);
       String content = response.getContent();
-      return Messages.parseDictionaryEntry(content).getValue();
+      return null;
+      //return Messages.parseDictionaryEntry(content).getValue();
     }
 
     public void addCall(String Customer, PhoneCall call) throws IOException {
