@@ -4,6 +4,7 @@ import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
 
 /**
  * The main class that parses the command line and communicates with the
@@ -13,25 +14,71 @@ public class Project4 {
 
     public static final String MISSING_ARGS = "Missing command line arguments";
 
-    public static void main(String... args) {
+    static final String README = "Author for Project 4: PhoneCall Project is : Shikha Shah. " + "\n" +
+            "This project takes the command line argument and also works on URL 'Localhost:8080/phonecall' which asks for the required argument. " +
+            "You can also print the phone calls by giving only customer name and also extended search option by passing start and end date." + "\n" +
+            "On client side for command line as the parameters are provided host name and port numbers are compulsory";
+
+    public static void main(String... args) throws IOException {
         String hostName = null;
         String portString = null;
-        String name, caller_number, callee_number, start_date, start_time, end_date, end_time, file_path, start_AMorPM, end_AMorPM, pretty_file;
-        name = caller_number = callee_number = start_date = start_time = end_date = end_time = file_path = start_AMorPM = end_AMorPM = pretty_file = null;
+        String name, caller_number, callee_number, start_date, start_time, end_date, end_time, start_AMorPM, end_AMorPM;
+        name = caller_number = callee_number = start_date = start_time = end_date = end_time = start_AMorPM = end_AMorPM = null;
+
+        if (args.length == 0) {
+            System.err.println("Missing command line arguments");
+            System.exit(1);
+        }
+
+        if (containsOption(args, "-README")) {
+            System.out.println(README);
+            System.exit(0);
+        }
+
+        boolean host_set        = false;
+        boolean port_set        = false;
+        boolean search_criteria = false;
 
         for (String arg : args) {
-            if (hostName == null) {
+
+            // set host name
+            if (arg.matches("-host")) {
+                host_set = true;
+                continue;
+            }
+            if (arg.matches("-host") && hostName == null && host_set) {
                 hostName = arg;
+            }
 
-            } else if ( portString == null) {
+            // set port number
+            if (arg.matches("-port")) {
+                port_set = true;
+                continue;
+            }
+            if (arg.matches("-port") && portString == null && port_set) {
                 portString = arg;
+            }
 
-            } else if (name == null) {
+            if (hostName == null) {
+                usage(MISSING_ARGS);
+
+            } else if (portString == null) {
+                usage("Missing port");
+            }
+
+            if (arg.matches("-search") || arg.matches("-print")) continue;
+
+            if (name == null) {
                 name = arg;
             } else if (caller_number == null) {
-                caller_number = arg;
+                if (arg.matches("-search")) {
+                    continue;
+                } else caller_number = arg;
             } else if (callee_number == null) {
-                callee_number = arg;
+                if (arg.matches("-search")) {
+                    continue;
+                } else
+                    callee_number = arg;
             } else if (start_date == null) {
                 start_date = arg;
             } else if (start_time == null) {
@@ -58,13 +105,7 @@ public class Project4 {
             } else {
                 usage("Extraneous command line argument: " + arg);
             }
-        }
 
-        if (hostName == null) {
-            usage( MISSING_ARGS );
-
-        } else if ( portString == null) {
-            usage( "Missing port" );
         }
 
         int port;
@@ -78,21 +119,31 @@ public class Project4 {
 
         PhoneBillRestClient client = new PhoneBillRestClient(hostName, port);
         PhoneBill           bill   = new PhoneBill(name);
-
         String message;
-        try {
 
+        if (containsOption(args, "-search") && (name != null) && (start_date != null) && (start_time != null)
+                && (start_AMorPM != null) && (end_AMorPM != null) && (end_date != null) && (end_time != null)) {
+
+        } else {
+            System.out.println("Some parameters for search criteria are missing");
+            System.exit(1);
+        }
+
+        //adding phone call
+        if (name != null && callee_number != null) {
             Validation val      = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time, start_AMorPM, end_AMorPM);
             PhoneCall  new_call = new PhoneCall(val);
             bill.addPhoneCall(new_call);
-            message = client.getPrettyPhoneBill(name);
+            client.addPhoneCall(bill.getCustomer(), new_call);
+            //message = client.getPrettyPhoneBill(name);
+            //System.out.println(message);
 
-        } catch ( IOException ex ) {
-            error("While contacting server: " + ex);
-            return;
+        } else {
+            if (name != null) {
+                //message = client.(name);
+                // System.out.println(message);
+            }
         }
-
-        System.out.println(message);
 
         System.exit(0);
     }
@@ -127,7 +178,7 @@ public class Project4 {
         PrintStream err = System.err;
         err.println("** " + message);
         err.println();
-        err.println("usage: java Project4 host port [word] [definition]");
+        err.println("usage: java Project4 host port [Bill] [Call]");
         err.println("  host         Host of web server");
         err.println("  port         Port of web server");
         err.println("  call         call in bill");
@@ -141,5 +192,16 @@ public class Project4 {
         err.println();
 
         System.exit(1);
+    }
+
+    /**
+     * <code>containsOption</code>
+     *
+     * @param args
+     * @param option
+     * @return list of all the options passed in the argument.
+     */
+    private static boolean containsOption(String[] args, String option) {
+        return Arrays.stream(args).anyMatch(s -> s.equals(option));
     }
 }

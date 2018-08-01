@@ -1,11 +1,7 @@
 package edu.pdx.cs410J.shikha2;
 
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.ParseException;
 
 /**
  * Class for formatting messages on the server side.  This is mainly to enable
@@ -13,17 +9,7 @@ import java.util.regex.Pattern;
  */
 public class Messages
 {
-    /*
-    public static String formatWordCount(int count )
-    {
-        return String.format("Phone Bill on server contains %d calls", count);
-    }
 
-    public static String formatDictionaryEntry(String word, String definition )
-    {
-        return String.format("  %s : %s", word, definition);
-    }
-*/
     public static String missingRequiredParameter( String parameterName )
     {
         return String.format("The required parameter \"%s\" is missing", parameterName);
@@ -43,44 +29,18 @@ public class Messages
         return "All Phone Call entries have been deleted";
     }
 
-        /*
-        public static Map.Entry<String, String> parseDictionaryEntry(String content) {
-
-        Pattern pattern = Pattern.compile("\\s*(.*) : (.*)");
-        Matcher matcher = pattern.matcher(content);
-
-        if (!matcher.find()) {
-            return null;
-        }
-
-        return new Map.Entry<>() {
-            @Override
-            public String getKey() {
-                return matcher.group(1);
-            }
-
-            @Override
-            public String getValue() {
-                String value = matcher.group(2);
-                if ("null".equals(value)) {
-                    value = null;
-                }
-                return value;
-            }
-
-            @Override
-            public String setValue(String value) {
-                throw new UnsupportedOperationException("This method is not implemented yet");
-            }
-        };
+    public static void printAllCallValues(PrintWriter writer, PhoneBill bill) {
+        PrettyPrinter pretty = new PrettyPrinter(writer);
+        PhoneBill     bill1  = (PhoneBill) pretty.sorted(bill);
+        writer.println(bill.getCustomer());
+        bill1.getPhoneCalls().forEach((call) -> writer.println(call.toString()));
     }
 
-    public static void formatDictionaryEntries(PrintWriter pw, Map<String, List<String>> dictionary) {
-        pw.println(Messages.formatWordCount(dictionary.size()));
-
-        for (Map.Entry<String, List<String>> entry : dictionary.entrySet()) {
-            pw.println(Messages.formatDictionaryEntry(entry.getKey(), entry.getValue().toString()));
-        }
+    public static void printSearchedCallValues(PrintWriter writer, PhoneBill bill, String stat_date_time, String end_date_time) throws ParseException {
+        PrettyPrinter pretty = new PrettyPrinter(writer);
+        PhoneBill     bill1  = (PhoneBill) pretty.search(bill, stat_date_time, end_date_time);
+        writer.println("Required Bill for " + bill.getCustomer());
+        bill1.getPhoneCalls().forEach((call) -> writer.println(call.toString()));
     }
 
     /*

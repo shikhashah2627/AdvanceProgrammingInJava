@@ -2,7 +2,6 @@ package edu.pdx.cs410J.shikha2;
 
 import edu.pdx.cs410J.InvokeMainTestCase;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -33,6 +32,7 @@ public class Project4IT extends InvokeMainTestCase {
         assertThat(result.getTextWrittenToStandardError(), containsString(Project4.MISSING_ARGS));
     }
 
+    /*
     @Ignore
     @Test
     public void test2EmptyServer() {
@@ -71,4 +71,3 @@ public class Project4IT extends InvokeMainTestCase {
         out = result.getTextWrittenToStandardOut();
         assertThat(out, out, containsString(Messages.formatDictionaryEntry(word, definition))); */
     }
-}
