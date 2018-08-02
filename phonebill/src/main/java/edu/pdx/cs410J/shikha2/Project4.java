@@ -17,7 +17,7 @@ public class Project4 {
     public static final String MISSING_ARGS = "Missing command line arguments";
 
     static final String README = "Author for Project 4: PhoneCall Project is : Shikha Shah. " + "\n" +
-            "This project takes the command line argument and also works on URL 'Localhost:8080/phonecall' which asks for the required argument. " +
+            "This project takes the command line argument and also works on URL 'Localhost:8080/phonecall' which asks for the required argument. " + "\n" +
             "You can also print the phone calls by giving only customer name and also extended search option by passing start and end date." + "\n" +
             "On client side for command line as the parameters are provided host name and port numbers are compulsory";
 
@@ -40,6 +40,7 @@ public class Project4 {
         boolean host_set        = false;
         boolean port_set        = false;
         boolean search_criteria = false;
+        boolean print_criteria  = false;
 
         for (String arg : args) {
 
@@ -64,9 +65,13 @@ public class Project4 {
             }
 
 
+            if (arg.matches("-search")) {
+                search_criteria = true;
+                continue;
+            }
 
-            if (arg.matches("-search") || arg.matches("-print"))
-            {   search_criteria = true;
+            if (arg.matches("-print")) {
+                print_criteria = true;
                 continue;
             }
 
@@ -87,11 +92,11 @@ public class Project4 {
                     System.out.println("Your 12-hour format for start time is not specified properly!");
                     System.exit(0);
                 }
-            } else if ((end_date == null && search_criteria) || (start_date == null && !search_criteria)) {
+            } else if ((end_date == null && search_criteria) || (end_date == null && !search_criteria)) {
                 end_date = arg;
-            } else if ((end_time == null  && search_criteria) || (start_date == null && !search_criteria)) {
+            } else if ((end_time == null && search_criteria) || (end_time == null && !search_criteria)) {
                 end_time = arg;
-            } else if ((end_AMorPM == null && search_criteria) || (start_date == null && !search_criteria)) {
+            } else if ((end_AMorPM == null && search_criteria) || (end_AMorPM == null && !search_criteria)) {
                 if (arg.toLowerCase().matches("am") || arg.toLowerCase().matches("pm")) {
                     end_AMorPM = arg;
                 } else {
@@ -149,6 +154,10 @@ public class Project4 {
             Validation val      = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time, start_AMorPM, end_AMorPM);
             PhoneCall  new_call = new PhoneCall(val);
             client.addPhoneCall(bill.getCustomer(), new_call);
+            if (print_criteria) {
+                message = Messages.new_call_information(new_call.toString());
+                System.out.println(message);
+            }
 
         } else {
             if (name != null && callee_number == null && start_date == null) {
@@ -200,7 +209,7 @@ public class Project4 {
         err.println();
         err.println("This simple program posts bill and their calls");
         err.println("to the server.");
-        err.println("If specific search time is specified, then the word's definition");
+        err.println("If specific search time is specified, then the bill for that time period");
         err.println("is printed.");
         err.println("If no search time is specified, all entries are printed");
         err.println();

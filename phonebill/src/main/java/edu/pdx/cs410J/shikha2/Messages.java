@@ -15,6 +15,10 @@ public class Messages
         return String.format("The required parameter \"%s\" is missing", parameterName);
     }
 
+    public static String inAppropriateRequiredParameter(String parameterName, String errorMessage) {
+        return String.format("The required parameter \"%s\" is inappropriate because of %s", parameterName, errorMessage);
+    }
+
     /**
      * @param new_call_information - new call details
      * @return prints the new call information that has been added.
@@ -42,19 +46,4 @@ public class Messages
         writer.println("Required Bill for " + bill.getCustomer());
         bill1.getPhoneCalls().forEach((call) -> writer.println(call.toString()));
     }
-
-    /*
-    public static Map<String, String> parseDictionary(String content) {
-        Map<String, String> map = new HashMap<>();
-
-        String[] lines = content.split("\n");
-        for (int i = 1; i < lines.length; i++) {
-            String line = lines[i];
-            Map.Entry<String, String> entry = parseDictionaryEntry(line);
-            map.put(entry.getKey(), entry.getValue());
-        }
-
-        return map;
-    }*/
-
 }

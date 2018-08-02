@@ -21,11 +21,11 @@ import java.util.Map;
  */
 public class PhoneBillServlet extends HttpServlet
 {
-    static final         String                    CUSTOMER_PARAMETER        = "Customer_Name";
-    private static final String                    CALLER_NUMBER             = "Caller_number";
-    private static final String                    CALLEE_PARAMETER          = "Callee_number";
-    private static final String                    START_DATE_TIME_PARAMETER = "Start_Date_Time";
-    private static final String                    END_DATE_TIME_PARAMETER   = "End_Date_Time";
+    static final         String                    CUSTOMER_PARAMETER        = "customer";
+    private static final String                    CALLER_NUMBER             = "callerNumber";
+    private static final String                    CALLEE_PARAMETER          = "calleeNumber";
+    private static final String                    START_DATE_TIME_PARAMETER = "startTime";
+    private static final String                    END_DATE_TIME_PARAMETER   = "endTime";
     private final        Map<String, List<String>> call_list                 = new HashMap<>();
 
     private Map<String, PhoneBill> bills = new HashMap<>();
@@ -44,7 +44,7 @@ public class PhoneBillServlet extends HttpServlet
         String stat_Date_Time = getParameter(START_DATE_TIME_PARAMETER, request);
         String end_Date_Time  = getParameter(END_DATE_TIME_PARAMETER, request);
 
-        if (customer == null && stat_Date_Time == null && end_Date_Time == null) {
+        if (customer != null && stat_Date_Time == null && end_Date_Time == null) {
             writePrettyPhoneBill(customer, response);
         } else if (stat_Date_Time == null && end_Date_Time == null) {
             writePrettyPhoneBill(customer, response);
@@ -52,6 +52,8 @@ public class PhoneBillServlet extends HttpServlet
             try {
                 getPhoneBillFromSearch(customer, stat_Date_Time, end_Date_Time, response);
             } catch (ParseException e) {
+                PrintWriter writer = response.getWriter();
+                writer.println("Parameters are not entered properly.");
                 e.printStackTrace();
             }
         }
@@ -123,10 +125,22 @@ public class PhoneBillServlet extends HttpServlet
         String stat_Date_Time = getParameter(START_DATE_TIME_PARAMETER, request);
         String end_Date_Time  = getParameter(END_DATE_TIME_PARAMETER, request);
 
+        if (customer == null) {
+            missingRequiredParameter(response, "customer name");
+        } else if (caller == null) {
+            missingRequiredParameter(response, "caller number");
+        } else if (callee == null) {
+            missingRequiredParameter(response, "callee number");
+        } else if (stat_Date_Time == null) {
+            missingRequiredParameter(response, "stat_Date_Time");
+        } else if (end_Date_Time == null) {
+            missingRequiredParameter(response, "end_Date_Time");
+        }
+
         String startTime1[] = stat_Date_Time.split(" ");
         String endTime1[]   = end_Date_Time.split(" ");
 
-        Validation val  = new Validation(customer, caller, callee, startTime1[0], startTime1[1], endTime1[0], endTime1[1], startTime1[2], endTime1[2]);
+        Validation val  = new Validation(customer, caller, callee, startTime1[0], startTime1[1], endTime1[0], endTime1[1], startTime1[2], endTime1[2], response);
         PhoneCall  call = new PhoneCall(val);
 
         PhoneBill bill = getPhoneBill(customer);
@@ -176,6 +190,11 @@ public class PhoneBillServlet extends HttpServlet
         throws IOException
     {
         String message = Messages.missingRequiredParameter(parameterName);
+        response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, message);
+    }
+
+    public void ErroneousMessage(HttpServletResponse response, String element, String errorMessage) throws UnsupportedOperationException, IOException {
+        String message = Messages.inAppropriateRequiredParameter(element, errorMessage);
         response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, message);
     }
 

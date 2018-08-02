@@ -3,9 +3,7 @@ package edu.pdx.cs410J.shikha2;
 import com.google.common.annotations.VisibleForTesting;
 import edu.pdx.cs410J.web.HttpRequestHelper;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +36,16 @@ public class PhoneBillRestClient extends HttpRequestHelper {
     }
 
     /**
-     * Returns the call from the specific search start and End time
+     * <code>getPhoneBillFromSearch</code> helps to find the bill from the given criteria.
+     *
+     * @param Customer_Name customer name is passed.
+     * @param Start_Date_Time start date of the search
+     * @param End_Date_Time end date of the search
+     * @return bill from start date to end date.
+     * @throws IOException
      */
     public String getPhoneBillFromSearch(String Customer_Name, String Start_Date_Time, String End_Date_Time) throws IOException {
-        Response    response = get(this.url, "Customer_Name", Customer_Name, "Start_Date_Time", Start_Date_Time, "End_Date_Time",  End_Date_Time);
+        Response response = get(this.url, "customer", Customer_Name, "startTime", Start_Date_Time, "endTime", End_Date_Time);
         throwExceptionIfNotOkayHttpStatus(response);
         return response.getContent();
     }
@@ -70,6 +74,7 @@ public class PhoneBillRestClient extends HttpRequestHelper {
 
     /**
      * <code>addPhoneCall</code> adds the phone call to bill from command line arguments.
+     *
      * @param customerName
      * @param call
      * @throws IOException
@@ -81,19 +86,26 @@ public class PhoneBillRestClient extends HttpRequestHelper {
         Start_date = sdf.format(call.getStartTime());
         End_date = sdf.format(call.getEndTime());
         String[] postParameters = {
-                "Customer_Name", customerName,
-                "Caller_number", call.getCaller(),
-                "Callee_number", call.getCallee(),
-                "Start_Date_Time", Start_date,
-                "End_Date_Time", End_date
+                "customer", customerName,
+                "callerNumber", call.getCaller(),
+                "calleeNumber", call.getCallee(),
+                "startTime", Start_date,
+                "endTime", End_date
         };
 
         Response response = postToMyURL(postParameters);
         throwExceptionIfNotOkayHttpStatus(response);
     }
 
+    /**
+     * <code>getAllPhoneCalls</code> if only customer name is passed.
+     *
+     * @param customer when customer name is passed
+     * @return bill from the server
+     * @throws IOException
+     */
     public String getAllPhoneCalls(String customer) throws IOException {
-        Response  response = get(this.url, "Customer_Name", customer);
+        Response response = get(this.url, "customer", customer);
         throwExceptionIfNotOkayHttpStatus(response);
         return response.getContent();
     }

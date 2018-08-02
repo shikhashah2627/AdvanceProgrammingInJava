@@ -21,22 +21,23 @@
 </h1>
 
 <h2>
-    These forms let you interact with the simple dictionary REST API that
+    These forms let you interact with the simple PhoneBill REST API that
     is created by the project archetype.
 </h2>
 
 
 <div>
     <form method="get" action="calls">
-        Enter Customer Name: <input name="Customer_Name" type="text"/> </br>
+        Enter Customer Name: <input name="customer" type="text"/> </br>
         List all Phone Calls <input type="submit" value="Submit"/>
     </form>
 </div>
 
 <div>
     <form method="get" action="calls">
-        Enter Start Date and Time <input name="Start_Date_Time" type="text"/> </br>
-        Enter End Date and Time <input name="End_Date_Time" type="text"/> </br>
+        Enter Customer Name: <input name="customer" type="text"/> </br>
+        Enter Start Date and Time <input name="startTime" type="text"/> </br>
+        Enter End Date and Time <input name="endTime" type="text"/> </br>
         <input type="submit" value="Search"/>
     </form>
 </div>
@@ -46,11 +47,11 @@
     <form method="post" action="calls" accept-charset=utf-8>
         Create a New PhoneCall Entry:
     </br>
-        Enter Customer Name: <input name="Customer_Name" type="text"/> </br>
-        Enter Caller Number: <input name="Caller_number" type="text"/> </br>
-        Enter Callee Number: <input name="Callee_number" type="text"/> </br>
-        Enter Start Date and time: <input name="Start_Date_Time" type="text"/> </br>
-        Enter End Date and TIme: <input name="End_Date_Time" type="text"/> </br>
+        Enter Customer Name: <input name="customer" type="text"/> </br>
+        Enter Caller Number: <input name="callerNumber" type="text"/> </br>
+        Enter Callee Number: <input name="calleeNumber" type="text"/> </br>
+        Enter Start Date and time: <input name="startTime" type="text"/> </br>
+        Enter End Date and TIme: <input name="endTime" type="text"/> </br>
         <input type="submit" value="Submit"/>
     </form>
 </div>
