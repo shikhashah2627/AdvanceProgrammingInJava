@@ -6,6 +6,7 @@ import edu.pdx.cs410J.web.HttpRequestHelper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,36 +37,19 @@ public class PhoneBillRestClient extends HttpRequestHelper {
         this.url = String.format("http://%s:%d/%s/%s", hostName, port, WEB_APP, SERVLET);
     }
 
-    /*
-     * Returns all phone call entries from the server
-
-    public Map<String, String> getPhoneBill(String customerName) throws IOException {
-      Response response = get(this.url);
-      throw new NoSuchPhoneBillException(customerName);
-    }*/
-
     /**
      * Returns the call from the specific search start and End time
      */
     public String getPhoneBillFromSearch(String Customer_Name, String Start_Date_Time, String End_Date_Time) throws IOException {
-        Response    response = get(this.url, "Customer_Name", "Start_Date", "End_Date_Time", Customer_Name, Start_Date_Time, End_Date_Time);
-        PhoneBill   bill     = getPhoneBill(Customer_Name);
-        PrintWriter writer;
-        Messages.printSearchedCallValues(writer, bill, Start_Date_Time, End_Date_Time);
+        Response    response = get(this.url, "Customer_Name", Customer_Name, "Start_Date_Time", Start_Date_Time, "End_Date_Time",  End_Date_Time);
         throwExceptionIfNotOkayHttpStatus(response);
-        String content = response.getContent();
-        return null;
-        //return Messages.parseDictionaryEntry(content).getValue();
+        return response.getContent();
     }
 
-    public void addCall(String Customer, PhoneCall call) throws IOException {
-        Response response = postToMyURL("Customer_Name", Customer, "Start_Date", Start_Date_Time, "End_Date_Time", End_Date_Time);
-        throwExceptionIfNotOkayHttpStatus(response);
-    }
 
     @VisibleForTesting
-    Response postToMyURL(String... dictionaryEntries) throws IOException {
-        return post(this.url, dictionaryEntries);
+    Response postToMyURL(String... phoneCallInformation) throws IOException {
+        return post(this.url, phoneCallInformation);
     }
 
     public void removeAllDictionaryEntries() throws IOException {
@@ -79,56 +63,41 @@ public class PhoneBillRestClient extends HttpRequestHelper {
             String customer = response.getContent();
             throw new NoSuchPhoneBillException(customer);
         } else if (code != HTTP_OK) {
-            //throw new PhoneBillRestException(code);
+            throw new PhoneBillRestException(code);
         }
         return response;
     }
 
+    /**
+     * <code>addPhoneCall</code> adds the phone call to bill from command line arguments.
+     * @param customerName
+     * @param call
+     * @throws IOException
+     */
     public void addPhoneCall(String customerName, PhoneCall call) throws IOException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+        String Start_date,End_date;
+        Start_date = sdf.format(call.getStartTime());
+        End_date = sdf.format(call.getEndTime());
         String[] postParameters = {
                 "Customer_Name", customerName,
                 "Caller_number", call.getCaller(),
                 "Callee_number", call.getCallee(),
-                "Start_Date_Time", call.getStartTimeString(),
-                "End_Date_Time", call.getEndTimeString()
+                "Start_Date_Time", Start_date,
+                "End_Date_Time", End_date
         };
 
         Response response = postToMyURL(postParameters);
         throwExceptionIfNotOkayHttpStatus(response);
     }
 
-    public void getAllPhoneCalls(String customer) throws IOException {
+    public String getAllPhoneCalls(String customer) throws IOException {
         Response  response = get(this.url, "Customer_Name", customer);
-        PhoneBill bill     = new PhoneBill(response.getContent());
-        //PrintWriter pw = response.ge
-        //Messages.printAllCallValues(PrintWriter pw,bill);
-        bill.getPhoneCalls();
-        if (bill == null) {
-            //response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        } else {
-
-        }
-    }
-
-
-    public void getPrettyPhoneBill(String customer) throws IOException {
-        Response  response = get(this.url, "Customer_Name", customer);
-        PhoneBill bill     = new PhoneBill(response.getContent());
-        bill.getPhoneCalls();
-        if (bill == null) {
-            //response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        } else {
-            PrintWriter   writer = response.getWriter();
-            PrettyPrinter pretty = new PrettyPrinter(writer);
-            // pretty print returns calls in sorted manner.
-            PhoneBill bill1 = (PhoneBill) pretty.sorted(bill);
-            writer.println(bill.getCustomer());
-            bill1.getPhoneCalls().forEach((call) -> writer.println(call.toString()));
-            response.setStatus(HttpServletResponse.SC_OK);
-        }
         throwExceptionIfNotOkayHttpStatus(response);
+        return response.getContent();
     }
-    /*
+
     private class PhoneBillRestException extends RuntimeException {
       public PhoneBillRestException(int httpStatusCode) {
         super("Got an HTTP Status Code of " + httpStatusCode);
@@ -138,13 +107,6 @@ public class PhoneBillRestClient extends HttpRequestHelper {
     public void removeAllPhoneBills() throws IOException {
         Response response = delete(this.url);
         throwExceptionIfNotOkayHttpStatus(response);
-    }*/
-
-    public PhoneBill getPhoneBill(String customer) {
-        return this.bills.get(customer);
     }
 
-    public void addPhoneBill(PhoneBill bill) {
-        this.bills.put(bill.getCustomer(), bill);
-    }
 }

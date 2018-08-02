@@ -4,6 +4,8 @@ import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 /**
@@ -19,7 +21,7 @@ public class Project4 {
             "You can also print the phone calls by giving only customer name and also extended search option by passing start and end date." + "\n" +
             "On client side for command line as the parameters are provided host name and port numbers are compulsory";
 
-    public static void main(String... args) throws IOException {
+    public static void main(String... args) throws IOException, ParseException {
         String hostName = null;
         String portString = null;
         String name, caller_number, callee_number, start_date, start_time, end_date, end_time, start_AMorPM, end_AMorPM;
@@ -46,8 +48,9 @@ public class Project4 {
                 host_set = true;
                 continue;
             }
-            if (arg.matches("-host") && hostName == null && host_set) {
+            if (containsOption(args, "-host")&& hostName == null && host_set) {
                 hostName = arg;
+                continue;
             }
 
             // set port number
@@ -55,46 +58,40 @@ public class Project4 {
                 port_set = true;
                 continue;
             }
-            if (arg.matches("-port") && portString == null && port_set) {
+            if (containsOption(args, "-port") && portString == null && port_set) {
                 portString = arg;
+                continue;
             }
 
-            if (hostName == null) {
-                usage(MISSING_ARGS);
 
-            } else if (portString == null) {
-                usage("Missing port");
+
+            if (arg.matches("-search") || arg.matches("-print"))
+            {   search_criteria = true;
+                continue;
             }
-
-            if (arg.matches("-search") || arg.matches("-print")) continue;
 
             if (name == null) {
                 name = arg;
-            } else if (caller_number == null) {
-                if (arg.matches("-search")) {
-                    continue;
-                } else caller_number = arg;
-            } else if (callee_number == null) {
-                if (arg.matches("-search")) {
-                    continue;
-                } else
-                    callee_number = arg;
-            } else if (start_date == null) {
+            } else if (caller_number == null && !search_criteria) {
+                caller_number = arg;
+            } else if (callee_number == null && !search_criteria) {
+                callee_number = arg;
+            } else if ((start_date == null && search_criteria) || (start_date == null && !search_criteria))  {
                 start_date = arg;
-            } else if (start_time == null) {
+            } else if ((start_time == null && search_criteria) || (start_time == null && !search_criteria)) {
                 start_time = arg;
-            } else if (start_AMorPM == null) {
+            } else if ((start_AMorPM == null && search_criteria) || (start_AMorPM == null && !search_criteria)) {
                 if (arg.toLowerCase().matches("am") || arg.toLowerCase().matches("pm")) {
                     start_AMorPM = arg;
                 } else {
                     System.out.println("Your 12-hour format for start time is not specified properly!");
                     System.exit(0);
                 }
-            } else if (end_date == null) {
+            } else if ((end_date == null && search_criteria) || (start_date == null && !search_criteria)) {
                 end_date = arg;
-            } else if (end_time == null) {
+            } else if ((end_time == null  && search_criteria) || (start_date == null && !search_criteria)) {
                 end_time = arg;
-            } else if (end_AMorPM == null) {
+            } else if ((end_AMorPM == null && search_criteria) || (start_date == null && !search_criteria)) {
                 if (arg.toLowerCase().matches("am") || arg.toLowerCase().matches("pm")) {
                     end_AMorPM = arg;
                 } else {
@@ -106,6 +103,13 @@ public class Project4 {
                 usage("Extraneous command line argument: " + arg);
             }
 
+        }
+
+        if (hostName == null) {
+            usage(MISSING_ARGS);
+
+        } else if (portString == null) {
+            usage("Missing port");
         }
 
         int port;
@@ -121,27 +125,37 @@ public class Project4 {
         PhoneBill           bill   = new PhoneBill(name);
         String message;
 
-        if (containsOption(args, "-search") && (name != null) && (start_date != null) && (start_time != null)
-                && (start_AMorPM != null) && (end_AMorPM != null) && (end_date != null) && (end_time != null)) {
-
-        } else {
-            System.out.println("Some parameters for search criteria are missing");
-            System.exit(1);
+        if (containsOption(args, "-search")) {
+            if ((name != null) && (start_date != null) && (start_time != null)
+                    && (start_AMorPM != null) && (end_AMorPM != null) && (end_date != null) && (end_time != null)) {
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+                String start_date_time = start_date + " " + start_time + " " + start_AMorPM;
+                String end_date_time = end_date + " " + end_time + " " + end_AMorPM;
+                sdf.setLenient(false);
+                start_date_time = sdf.format(sdf.parse(start_date_time)).toLowerCase();
+                end_date_time = sdf.format(sdf.parse(end_date_time)).toLowerCase();
+                message = client.getPhoneBillFromSearch(name,start_date_time,end_date_time);
+                System.out.println(message);
+                System.exit(0);
+            } else {
+                System.out.println("Some parameters for search criteria are missing");
+                System.exit(1);
+            }
         }
 
-        //adding phone call
+
+        //adding phone call or find the call with only customer name passed.
         if (name != null && callee_number != null) {
             Validation val      = new Validation(name, caller_number, callee_number, start_date, start_time, end_date, end_time, start_AMorPM, end_AMorPM);
             PhoneCall  new_call = new PhoneCall(val);
-            bill.addPhoneCall(new_call);
             client.addPhoneCall(bill.getCustomer(), new_call);
-            //message = client.getPrettyPhoneBill(name);
-            //System.out.println(message);
 
         } else {
-            if (name != null) {
-                //message = client.(name);
-                // System.out.println(message);
+            if (name != null && callee_number == null && start_date == null) {
+                message = client.getAllPhoneCalls(name);
+                System.out.println(message);
+            } else {
+                System.exit(1);
             }
         }
 

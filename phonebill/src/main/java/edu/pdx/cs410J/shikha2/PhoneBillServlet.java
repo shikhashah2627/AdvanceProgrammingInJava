@@ -69,12 +69,13 @@ public class PhoneBillServlet extends HttpServlet
         PhoneBill   bill   = getPhoneBill(customer);
         PrintWriter writer = response.getWriter();
         if (bill == null) {
-            writer.println("No bill for such customer.");
+            writer.println("No bill for such customer or there is an empty bill.");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
 
             PrettyPrinter    pretty = new PrettyPrinter(writer);
             SimpleDateFormat sdf    = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+            sdf.setLenient(false);
             stat_date_time = sdf.format(sdf.parse(stat_date_time)).toLowerCase();
             end_date_time = sdf.format(sdf.parse(end_date_time)).toLowerCase();
             if (sdf.parse(stat_date_time).compareTo(sdf.parse(end_date_time)) > 0) {
