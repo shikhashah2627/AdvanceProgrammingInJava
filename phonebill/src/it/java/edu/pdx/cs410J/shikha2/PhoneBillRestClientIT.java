@@ -33,11 +33,11 @@ public class PhoneBillRestClientIT {
     client.removeAllDictionaryEntries();
   }
 
-  @Test(expected = NoSuchPhoneBillException.class)
-  public void test1EmptyServerThrowsNoPhoneBill() throws IOException {
-    PhoneBillRestClient client = newPhoneBillRestClient();
-    //client.getPhoneBill(customerName);
-  }
+    @Test(expected = NoSuchPhoneBillException.class)
+    public void test1EmptyServerThrowsNoSuchPhoneBillException() throws IOException {
+        PhoneBillRestClient client = newPhoneBillRestClient();
+        client.getAllPhoneCalls("customer");
+    }
 
     @Ignore
     @Test

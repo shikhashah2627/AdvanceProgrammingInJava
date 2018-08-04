@@ -103,6 +103,7 @@ public class PhoneBillServlet extends HttpServlet
         PhoneBill   bill   = getPhoneBill(customer);
         PrintWriter writer = response.getWriter();
         if (bill == null) {
+            writer.println("No bill for such customer or there is an empty bill.");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
             Messages.printAllCallValues(writer,bill);
