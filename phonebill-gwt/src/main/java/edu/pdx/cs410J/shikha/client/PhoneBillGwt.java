@@ -4,12 +4,16 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dev.shell.remoteui.RemoteMessageProto;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.UmbrellaException;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -121,6 +125,41 @@ public class PhoneBillGwt implements EntryPoint {
     panel.add(showClientSideExceptionButton);
   }
 
+  private void addMenuItems(MenuBar menu) {
+    menu.setWidth("300px");
+    MenuBar HelpMe = new MenuBar();
+    HelpMe.addItem("About Us", new Command() {
+      @Override
+      public void execute() {
+        //showSelectedMenuItem("About Us");
+      }
+    });
+    menu.addItem(new MenuItem("Add Call", new Command() {
+      @Override
+      public void execute() {
+
+      }
+    }));
+    menu.addSeparator();
+    menu.addItem(new MenuItem("Search Call", new Command() {
+      @Override
+      public void execute() {
+
+      }
+    }));
+    menu.addSeparator();
+    menu.addItem(new MenuItem("About Us", new Command() {
+      @Override
+      public void execute() {
+
+      }
+    }));
+  }
+
+  private void showSelectedMenuItem(String add_call) {
+  }
+
+
   private void throwClientSideException() {
     logger.info("About to throw a client-side exception");
     throw new IllegalStateException("Expected exception on the client side");
@@ -196,9 +235,13 @@ public class PhoneBillGwt implements EntryPoint {
   private void setupUI() {
     RootPanel rootPanel = RootPanel.get();
     VerticalPanel panel = new VerticalPanel();
+    MenuBar menuItems = new MenuBar();
     rootPanel.add(panel);
+    rootPanel.add(menuItems);
 
     addWidgets(panel);
+    addMenuItems(menuItems);
+
   }
 
   private void setUpUncaughtExceptionHandler() {
