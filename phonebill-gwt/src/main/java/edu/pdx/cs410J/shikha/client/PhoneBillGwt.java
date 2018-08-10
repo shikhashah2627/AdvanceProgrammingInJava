@@ -131,7 +131,7 @@ public class PhoneBillGwt implements EntryPoint {
     HelpMe.addItem("About Us", new Command() {
       @Override
       public void execute() {
-        //showSelectedMenuItem("About Us");
+        showPhoneBill();
       }
     });
     menu.addItem(new MenuItem("Add Call", new Command() {
@@ -148,16 +148,19 @@ public class PhoneBillGwt implements EntryPoint {
       }
     }));
     menu.addSeparator();
-    menu.addItem(new MenuItem("About Us", new Command() {
+    MenuBar About_Us = new MenuBar();
+    About_Us.setWidth("150px");
+    About_Us.addItem(new MenuItem("README", new Command() {
       @Override
       public void execute() {
-
+        showPhoneBill();
       }
     }));
+
+    menu.addItem(new MenuItem("About Us",About_Us));
   }
 
-  private void showSelectedMenuItem(String add_call) {
-  }
+
 
 
   private void throwClientSideException() {

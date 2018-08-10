@@ -15,6 +15,7 @@ import org.junit.Test;
  * And since this test code is compiled into JavaScript, you can't use hamcrest matchers.  :(
  */
 public class PhoneBillGwtIT extends GWTTestCase {
+
   @Override
   public String getModuleName() {
     return "edu.pdx.cs410J.shikha.PhoneBillIntegrationTests";
@@ -155,7 +156,7 @@ public class PhoneBillGwtIT extends GWTTestCase {
    * like you need to fire the native event instead.  Lame.
    *
    * @param button The button to click
-   */
+*/
   private void click(final Button button) {
     assertNotNull("Button is null", button);
     NativeEvent event = Document.get().createClickEvent(0, 0, 0, 0, 0, false, false, false, false);

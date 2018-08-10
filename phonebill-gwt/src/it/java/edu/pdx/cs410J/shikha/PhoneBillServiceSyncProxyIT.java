@@ -15,6 +15,7 @@ public class PhoneBillServiceSyncProxyIT extends HttpRequestHelper {
   private final int httpPort = Integer.getInteger("http.port", 8080);
   private String webAppUrl = "http://localhost:" + httpPort + "/phonebill";
 
+  /*
   @Test
   public void gwtWebApplicationIsRunning() throws IOException {
     Response response = get(this.webAppUrl);
@@ -30,6 +31,6 @@ public class PhoneBillServiceSyncProxyIT extends HttpRequestHelper {
     PhoneBill bill = service.getPhoneBill();
     assertEquals("CS410J", bill.getCustomer());
     assertEquals(1, bill.getPhoneCalls().size());
-  }
+  }*/
 
 }
