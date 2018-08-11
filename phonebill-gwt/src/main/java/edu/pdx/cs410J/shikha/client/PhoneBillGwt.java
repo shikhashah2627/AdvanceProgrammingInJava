@@ -302,6 +302,8 @@ public class PhoneBillGwt implements EntryPoint {
             @Override
             public void onClick(ClickEvent clickEvent) {
                 Validation val = new Validation(Customer_Name,Caller_Number,Callee_Number);
+                PhoneCall call = new PhoneCall();
+
                 showOutputDeck();
             }
         });
