@@ -13,7 +13,7 @@ public class PhoneBillServiceImplTest {
   @Test
   public void serviceReturnsExpectedPhoneBill() {
     PhoneBillServiceImpl service = new PhoneBillServiceImpl();
-    PhoneBill bill = service.getPhoneBill();
+    PhoneBill bill = service.addNewPhoneCall();
     assertThat(bill.getPhoneCalls().size(), equalTo(1));
   }
 }

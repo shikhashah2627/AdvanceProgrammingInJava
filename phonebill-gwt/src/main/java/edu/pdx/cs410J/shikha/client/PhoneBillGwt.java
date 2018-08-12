@@ -9,12 +9,17 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.UmbrellaException;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
+import java.text.ParseException;
 import java.util.Collection;
+import java.util.Date;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,12 +27,18 @@ import java.util.logging.Logger;
  * A basic GWT class that makes sure that we can send an Phone Bill back from the server
  */
 public class PhoneBillGwt implements EntryPoint {
+    private       Date                  Date_Start_Date_Time,Date_End_Date_Time;
     private final Alerter               alerter;
     private final PhoneBillServiceAsync phoneBillService;
     private final Logger                logger;
+    private DateTimeFormat format = DateTimeFormat.getFormat("MM/dd/yyyy hh:mm a");
+    private String Number_pattern = "^\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d";
+    private String Name_pattern   = "([a-zA-Z0-9] ?)+[a-zA-Z0-9]";
+    PhoneCall call;
+    //SortedSet<PhoneCall> call_list = new TreeSet<>();
 
     private final DeckPanel layoutPanel = new DeckPanel();
-    String Customer_Name,Caller_Number,Callee_Number,Star_Date_Time,End_Date_Time;
+    String Customer_Name,Caller_Number,Callee_Number,Start_Date_Time,End_Date_Time;
     public PhoneBillGwt() {
         this(new Alerter() {
             @Override
@@ -72,65 +83,18 @@ public class PhoneBillGwt implements EntryPoint {
         return throwable;
     }
 
-//  private void addWidgets(VerticalPanel panel) {
-//    showPhoneBillButton = new Button("Show Phone Bill");
-//    showPhoneBillButton.addClickHandler(new ClickHandler() {
-//      @Override
-//      public void onClick(ClickEvent clickEvent) {
-//        showPhoneBill();
-//      }
-//    });
-//
-//    showUndeclaredExceptionButton = new Button("Show undeclared exception");
-//    showUndeclaredExceptionButton.addClickHandler(new ClickHandler() {
-//      @Override
-//      public void onClick(ClickEvent clickEvent) {
-//        showUndeclaredException();
-//      }
-//    });
-//
-//    showDeclaredExceptionButton = new Button("Show declared exception");
-//    showDeclaredExceptionButton.addClickHandler(new ClickHandler() {
-//      @Override
-//      public void onClick(ClickEvent clickEvent) {
-//        showDeclaredException();
-//      }
-//    });
-//
-//    showClientSideExceptionButton= new Button("Show client-side exception");
-//    showClientSideExceptionButton.addClickHandler(new ClickHandler() {
-//      @Override
-//      public void onClick(ClickEvent clickEvent) {
-//        throwClientSideException();
-//      }
-//    });
-//
-//    panel.add(showPhoneBillButton);
-//    panel.add(showUndeclaredExceptionButton);
-//    panel.add(showDeclaredExceptionButton);
-//    panel.add(showClientSideExceptionButton);
-//  }
-
     private void addMenuItems(MenuBar menu) {
-        menu.setWidth("300px");
-        MenuBar HelpMe = new MenuBar();
-        HelpMe.addItem("About Us", new Command() {
-            @Override
-            public void execute() {
-                showPhoneBill();
-            }
-        });
         menu.addItem(new MenuItem("Add Call", new Command() {
             @Override
             public void execute() {
-
+                showAddCallScreen();
             }
         }));
         menu.addSeparator();
         menu.addItem(new MenuItem("Search Call", new Command() {
             @Override
             public void execute() {
-
+                showSearchCallScreen();
             }
         }));
         menu.addSeparator();
@@ -144,6 +108,10 @@ public class PhoneBillGwt implements EntryPoint {
         }));
 
         menu.addItem(new MenuItem("About Us", About_Us));
+    }
+
+    private void showSearchCallScreen() {
+        this.layoutPanel.showWidget(1);
     }
 
 
@@ -182,9 +150,10 @@ public class PhoneBillGwt implements EntryPoint {
         });
     }
 
-    private void showPhoneBill() {
-        logger.info("Calling getPhoneBill");
-        phoneBillService.getPhoneBill(new AsyncCallback<PhoneBill>() {
+    // shows the latest call added.
+    private void showNewCall(PhoneCall call) {
+        logger.info("Calling addNewPhoneCall");
+        phoneBillService.addNewPhoneCall(call,Customer_Name,new AsyncCallback<PhoneBill>() {
 
             @Override
             public void onFailure(Throwable ex) {
@@ -193,9 +162,11 @@ public class PhoneBillGwt implements EntryPoint {
 
             @Override
             public void onSuccess(PhoneBill phoneBill) {
-                StringBuilder         sb    = new StringBuilder(phoneBill.toString());
-                Collection<PhoneCall> calls = phoneBill.getPhoneCalls();
-                for (PhoneCall call : calls) {
+                SortedSet<PhoneCall> call_list=new TreeSet<>();
+                Collection calls = phoneBill.getPhoneCalls();
+                StringBuilder         sb    = new StringBuilder(phoneBill.toString() + "\n");
+                call_list.addAll(calls);
+                for (PhoneCall call : call_list) {
                     sb.append(call);
                     sb.append("\n");
                 }
@@ -203,6 +174,7 @@ public class PhoneBillGwt implements EntryPoint {
             }
         });
     }
+
 
     private void showReadmeValue() {
         logger.info("Showing README values");
@@ -248,71 +220,75 @@ public class PhoneBillGwt implements EntryPoint {
 
         layout_form.add(new Label("Enter the Customer Name: "));
         TextBox customer_name = new TextBox();
-        // get the entered customer name.
-        customer_name.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent changeEvent) {
-                Customer_Name = getInsertedValues(customer_name);
-            }
-        });
         layout_form.add(customer_name);
+        // get the entered customer name verified.
+        parseCustomerName(customer_name);
+
 
         layout_form.add(new Label("Enter the Caller Number in the format of XXX-XXX-XXXX: "));
         TextBox caller_number = new TextBox();
+        layout_form.add(caller_number);
+        // check the caller number format
         caller_number.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent changeEvent) {
                 Caller_Number = getInsertedValues(caller_number);
+                if (Caller_Number.matches(Number_pattern)) {
+                    PhoneBillGwt.this.Caller_Number = Caller_Number;
+                } else {
+                    alerter.alert("Caller Phone number doesn't match the asked format.");
+                }
+
             }
         });
-        layout_form.add(caller_number);
 
         layout_form.add(new Label("Enter the Callee Number in the format of XXX-XXX-XXXX: "));
         TextBox callee_number = new TextBox();
+        layout_form.add(callee_number);
+        // check the callee number format.
         callee_number.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent changeEvent) {
                 Callee_Number = getInsertedValues(callee_number);
+                if (Callee_Number.matches(Number_pattern)) {
+                    PhoneBillGwt.this.Callee_Number = Callee_Number;
+                } else {
+                    alerter.alert("Callee Phone number doesn't match the asked format.");
+                }
+
             }
         });
-        layout_form.add(callee_number);
+
 
         layout_form.add(new Label("Enter the Start Date and Time: "));
         TextBox start_date_time = new TextBox();
-        start_date_time.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent changeEvent) {
-                Star_Date_Time = getInsertedValues(start_date_time);
-            }
-        });
         layout_form.add(start_date_time);
+        parseStartDate(start_date_time);
 
         layout_form.add(new Label("Enter the End Date and Time: "));
         TextBox end_Date_time = new TextBox();
-        end_Date_time.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent changeEvent) {
-                End_Date_Time = getInsertedValues(end_Date_time);
-            }
-        });
         layout_form.add(end_Date_time);
+        parseEndDate(end_Date_time);
 
         Button Submit = new Button("Submit");
+        layout_form.add(Submit);
         Submit.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent clickEvent) {
-                Validation val = new Validation(Customer_Name,Caller_Number,Callee_Number);
-                PhoneCall call = new PhoneCall();
-
-                showOutputDeck();
+                if(Caller_Number!=null && Callee_Number!=null && Date_Start_Date_Time!=null && Date_End_Date_Time!=null) {
+                    call = new PhoneCall(Caller_Number,Callee_Number,Date_Start_Date_Time,Date_End_Date_Time,Start_Date_Time,End_Date_Time);
+                    showNewCall(call);
+                }
             }
         });
-        layout_form.add(Submit);
+
 
         return layout_form;
     }
 
+
     private void showOutputDeck() {
+
         this.layoutPanel.showWidget(2);
     }
 
@@ -333,7 +309,19 @@ public class PhoneBillGwt implements EntryPoint {
     private VerticalPanel showOutput() {
         VerticalPanel layout = new VerticalPanel();
         layout.add(new Label("hi"));
+
+        Button Add_New_Call = new Button("Add one more call");
+        Add_New_Call.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                showAddCallScreen();
+            }
+        });
         return layout;
+    }
+
+    private void showAddCallScreen() {
+        this.layoutPanel.showWidget(0);
     }
 
     // show the screen for searching functionality
@@ -343,25 +331,122 @@ public class PhoneBillGwt implements EntryPoint {
      */
     private VerticalPanel searchPhoneCalls() {
         VerticalPanel layout_form = new VerticalPanel();
+
         layout_form.add(new Label("Enter the Customer Name: "));
         TextBox customer_name = new TextBox();
         layout_form.add(customer_name);
+        parseCustomerName(customer_name);
 
-        Button Submit = new Button("Submit Customer Name");
+
+        Button Submit = new Button("Get All Calls..");
         layout_form.add(Submit);
+        Submit.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                getPhoneBill(Customer_Name);
+            }
+        });
+
+
+
+
 
         layout_form.add(new Label("Enter the Start Date and Time: "));
         TextBox start_date_time = new TextBox();
         layout_form.add(start_date_time);
+        parseStartDate(start_date_time);
 
         layout_form.add(new Label("Enter the End Date and Time: "));
         TextBox end_Date_time = new TextBox();
         layout_form.add(end_Date_time);
+        parseEndDate(end_Date_time);
 
         Button Submit_Search_Criteria = new Button("Submit Criteria");
         layout_form.add(Submit_Search_Criteria);
+        Submit_Search_Criteria.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent clickEvent) {
+                searchCallsWithinRange(Customer_Name,Start_Date_Time,End_Date_Time);
+            }
+        });
 
         return layout_form;
+    }
+
+    private void searchCallsWithinRange(String customer_name, String start_date_time, String end_date_time) {
+        logger.info("Calling searchPhoneCall Method.");
+        try {
+            phoneBillService.searchPhoneCall(customer_name,start_date_time,end_date_time,new AsyncCallback<PhoneBill>() {
+
+                @Override
+                public void onFailure(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onSuccess(PhoneBill phoneBill) {
+                    StringBuilder sb = new StringBuilder(phoneBill.toString());
+                    SortedSet<PhoneCall> call_list = new TreeSet<>();
+                    Collection flights = phoneBill.getPhoneCalls();
+                    call_list.addAll(flights);
+
+                    for (PhoneCall call : call_list) {
+                        sb.append(call);
+                        sb.append("\n");
+                    }
+                    alerter.alert(sb.toString());
+                }
+            });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getPhoneBill(String customer_name) {
+    }
+
+    private void parseCustomerName(TextBox customer_name) {
+        customer_name.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent changeEvent) {
+                Customer_Name = getInsertedValues(customer_name);
+                if (Customer_Name.matches(Name_pattern)) {
+                    PhoneBillGwt.this.Customer_Name = Customer_Name;
+                } else {
+                    alerter.alert("Customer Name should not include any special characters.");
+                }
+            }
+        });
+    }
+
+    private void parseEndDate(TextBox end_Date_time) {
+        end_Date_time.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent changeEvent) {
+                End_Date_Time = getInsertedValues(end_Date_time);
+                try {
+                    PhoneBillGwt.this.Date_End_Date_Time = format.parse(End_Date_Time);
+                    End_Date_Time = format.format(Date_End_Date_Time).toLowerCase();
+                } catch (IllegalArgumentException ex) {
+                    alerter.alert("Invalid date: " + End_Date_Time);
+                }
+            }
+        });
+    }
+
+    private void parseStartDate(TextBox start_date_time) {
+        start_date_time.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent changeEvent) {
+                Start_Date_Time = getInsertedValues(start_date_time);
+                try {
+                    PhoneBillGwt.this.Date_Start_Date_Time = format.parse(Start_Date_Time);
+                    Start_Date_Time = format.format(Date_Start_Date_Time).toLowerCase();
+                } catch (IllegalArgumentException ex) {
+                    alerter.alert("Invalid date: " + Start_Date_Time);
+                }
+            }
+        });
     }
 
     private void setUpUncaughtExceptionHandler() {

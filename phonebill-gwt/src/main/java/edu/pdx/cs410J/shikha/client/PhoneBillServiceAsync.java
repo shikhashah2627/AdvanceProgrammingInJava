@@ -2,15 +2,13 @@ package edu.pdx.cs410J.shikha.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import java.text.ParseException;
+
 /**
  * The client-side interface to the phone bill service
  */
 public interface PhoneBillServiceAsync {
 
-  /**
-   * Return the current date/time on the server
-   */
-  void getPhoneBill(AsyncCallback<PhoneBill> async);
 
   /**
    * Always throws an exception so that we can see how to handle uncaught
@@ -23,4 +21,17 @@ public interface PhoneBillServiceAsync {
    */
   void throwDeclaredException(AsyncCallback<Void> async);
 
+  /**
+   * Returns the a dummy Phone Bill
+   */
+  void addNewPhoneCall(PhoneCall call, String Customer_Name, AsyncCallback<PhoneBill> async);
+
+    /**
+     *
+     * @param Customer_Name
+     * @param Start_Date
+     * @param End_date
+     * @param async
+     */
+  void searchPhoneCall(String Customer_Name,String Start_Date, String End_date, AsyncCallback<PhoneBill> async ) throws ParseException;
 }

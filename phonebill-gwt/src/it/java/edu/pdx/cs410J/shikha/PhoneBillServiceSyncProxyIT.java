@@ -28,7 +28,7 @@ public class PhoneBillServiceSyncProxyIT extends HttpRequestHelper {
     SyncProxy.setBaseURL(this.webAppUrl + "/" + moduleName + "/");
 
     PhoneBillService service = SyncProxy.createSync(PhoneBillService.class);
-    PhoneBill bill = service.getPhoneBill();
+    PhoneBill bill = service.addNewPhoneCall();
     assertEquals("CS410J", bill.getCustomer());
     assertEquals(1, bill.getPhoneCalls().size());
   }*/
