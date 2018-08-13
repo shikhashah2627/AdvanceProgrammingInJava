@@ -1,8 +1,7 @@
 package edu.pdx.cs410J.shikha.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import java.text.ParseException;
+import edu.pdx.cs410J.AbstractPhoneBill;
 
 /**
  * The client-side interface to the phone bill service
@@ -24,14 +23,15 @@ public interface PhoneBillServiceAsync {
   /**
    * Returns the a dummy Phone Bill
    */
-  void addNewPhoneCall(PhoneCall call, String Customer_Name, AsyncCallback<PhoneBill> async);
 
-    /**
-     *
-     * @param Customer_Name
-     * @param Start_Date
-     * @param End_date
-     * @param async
-     */
-  void searchPhoneCall(String Customer_Name,String Start_Date, String End_date, AsyncCallback<PhoneBill> async ) throws ParseException;
+
+  void searchPhoneCall(String Customer_Name, String Start_Date, String End_date, AsyncCallback<AbstractPhoneBill> async);
+
+  /**
+   * Returns the a dummy Phone Bill as per the criteria.
+   */
+  void addNewPhoneCall(PhoneCall call, String Customer_Name, AsyncCallback<AbstractPhoneBill> async);
+
+  void printOutput(String output_value, AsyncCallback<String> async);
+
 }

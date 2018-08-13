@@ -2,9 +2,7 @@ package edu.pdx.cs410J.shikha.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-
-import java.io.Serializable;
-import java.text.ParseException;
+import edu.pdx.cs410J.AbstractPhoneBill;
 
 /**
  * A GWT remote service that returns a dummy Phone Bill
@@ -15,7 +13,7 @@ public interface PhoneBillService extends RemoteService{
   /**
    * Returns the a dummy Phone Bill
    */
-  PhoneBill addNewPhoneCall(PhoneCall call, String Customer_Name);
+  AbstractPhoneBill addNewPhoneCall(PhoneCall call, String Customer_Name);
 
   /**
    * Always throws an undeclared exception so that we can see GWT handles it.
@@ -27,6 +25,7 @@ public interface PhoneBillService extends RemoteService{
    */
   void throwDeclaredException() throws IllegalStateException;
 
-  PhoneBill searchPhoneCall(String Customer_Name, String Start_Date, String End_date);
+  AbstractPhoneBill searchPhoneCall(String Customer_Name, String Start_Date, String End_date);
 
+  String printOutput(String output_value);
 }

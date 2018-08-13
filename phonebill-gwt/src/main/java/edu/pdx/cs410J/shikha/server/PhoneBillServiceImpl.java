@@ -1,6 +1,7 @@
 package edu.pdx.cs410J.shikha.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.shikha.client.PhoneBill;
 import edu.pdx.cs410J.shikha.client.PhoneCall;
 import edu.pdx.cs410J.shikha.client.PhoneBillService;
@@ -18,15 +19,14 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
 
   /**
    * Returns the a dummy Phone Bill
-   *
-   * @param call
+   *  @param call
    * @param Customer_Name
    */
   @Override
-  public PhoneBill addNewPhoneCall(PhoneCall call, String Customer_Name) {
+  public AbstractPhoneBill addNewPhoneCall(PhoneCall call, String Customer_Name) {
       PhoneBill new_bill = new PhoneBill(Customer_Name);
 
-      if(bill.size() == 0) {
+      if(bill.get(Customer_Name) == null) {
           new_bill.addPhoneCall(call);
           bill.put(Customer_Name,new_bill);
       } else {
@@ -47,11 +47,20 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
   }
 
     @Override
-    public PhoneBill searchPhoneCall(String Customer_Name, String Start_Date, String End_date)  {
+    public AbstractPhoneBill searchPhoneCall(String Customer_Name, String Start_Date, String End_date)  {
         if(bill.get(Customer_Name) == null){
             return null;
-        }
-        else {
+        } else if (Start_Date == null && End_date == null) {
+            PhoneBill             full_bill = new PhoneBill(Customer_Name);
+            PhoneBill  bill1      = bill.get(Customer_Name);
+            Collection           calls      = bill1.getPhoneCalls();
+            SortedSet<PhoneCall> call_list    =new TreeSet<>();
+            call_list.addAll(calls);
+            for (Object call : call_list) {
+               full_bill.addPhoneCall((PhoneCall) call);
+            }
+            return full_bill;
+        } else {
             PhoneBill             search_bill = new PhoneBill(Customer_Name);
             PhoneBill              bill1      = bill.get(Customer_Name);
             Collection           calls      = bill1.getPhoneCalls();
@@ -80,6 +89,11 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
             }
             return search_bill;
         }
+    }
+
+    @Override
+    public String printOutput(String output_value) {
+        return output_value;
     }
 
     /**
