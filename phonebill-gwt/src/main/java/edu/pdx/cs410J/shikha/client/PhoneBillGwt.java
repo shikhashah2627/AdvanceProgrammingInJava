@@ -16,8 +16,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import edu.pdx.cs410J.AbstractPhoneBill;
 
-import java.text.ParseException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +34,7 @@ public class PhoneBillGwt implements EntryPoint {
     private DateTimeFormat format = DateTimeFormat.getFormat("MM/dd/yyyy hh:mm a");
     private String Number_pattern = "^\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d";
     private String Name_pattern   = "([a-zA-Z0-9] ?)+[a-zA-Z0-9]";
+    private Label final_output = new Label();
     public String sb_appended_text_final = "";
 
     private final DeckPanel layoutPanel = new DeckPanel();
@@ -271,6 +274,7 @@ public class PhoneBillGwt implements EntryPoint {
             @Override
             public void onClick(ClickEvent clickEvent) {
                 PhoneBillGwt.this.sb_appended_text_final = "this is trial";
+                final_output.setText(sb_appended_text_final);
                 showOutputDeck();
             }
         });
@@ -299,11 +303,16 @@ public class PhoneBillGwt implements EntryPoint {
                 SortedSet<PhoneCall> call_list=new TreeSet<>();
                 Collection calls = phoneBill.getPhoneCalls();
                 call_list.addAll(calls);
-                PhoneBillGwt.this.sb_appended_text_final = "\"New Call Information added to existing bill of : \" + call_list.size() + \" \\n\" +  call.toString()";
-
+                PhoneBillGwt.this.sb_appended_text_final = "New Call Information added to existing bill of : "+ call_list.size() + "\n " +call.toString();
                 //alerter.alert("New Call Information added to existing bill of : " + call_list.size() + " \n" +  call.toString());
+
+                //showFinalOutput(phoneBill);
             }
         });
+    }
+
+    private void showFinalOutput(AbstractPhoneBill bill) {
+        this.final_output.setText(bill.toString());
     }
 
     /**
@@ -339,12 +348,7 @@ public class PhoneBillGwt implements EntryPoint {
 
         layout.add(new Label("Welcome to the output screen!"));
 
-        Label output = new Label();
-        layout.add(output);
-
-        output.setText(sb_appended_text_final);
-
-
+        layout.add(final_output);
 
         Button Add_New_Call = new Button("Add one more call");
         Add_New_Call.addClickHandler(new ClickHandler() {
@@ -439,6 +443,7 @@ public class PhoneBillGwt implements EntryPoint {
             public void onClick(ClickEvent clickEvent) {
                 searchCallsWithinRange(search_customer_name_text,search_Start_Time,search_End_Time);
                 setTextAsNull(search_start_date_time,search_end_Date_time);
+                showOutputDeck();
             }
         });
 
@@ -469,6 +474,8 @@ public class PhoneBillGwt implements EntryPoint {
                 if(phoneBill == null) {
                     alerter.alert("No such bill exist for the passed customer : " + search_customer_name);
                 } else {
+
+                    showFinalOutput(phoneBill);
                     String append1;
                     if (start_date_time != null && end_date_time != null) {
                         append1 = phoneBill.toString() + " from " + start_date_time + " to " + end_date_time + " are : \n";
@@ -486,8 +493,8 @@ public class PhoneBillGwt implements EntryPoint {
                         sb.append(call);
                         sb.append("\n");
                     }
-                    alerter.alert(sb.toString());
-
+                    //alerter.alert(sb.toString());
+                    final_output.setText(sb.toString());
 
                 }
 

@@ -5,6 +5,7 @@ import edu.pdx.cs410J.AbstractPhoneBill;
 import edu.pdx.cs410J.shikha.client.PhoneBill;
 import edu.pdx.cs410J.shikha.client.PhoneCall;
 import edu.pdx.cs410J.shikha.client.PhoneBillService;
+import edu.pdx.cs410J.shikha.client.PrettyPrinter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -91,10 +92,7 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
         }
     }
 
-    @Override
-    public String printOutput(String output_value) {
-        return output_value;
-    }
+
 
     /**
    * Log unhandled exceptions to standard error

@@ -27,5 +27,4 @@ public interface PhoneBillService extends RemoteService{
 
   AbstractPhoneBill searchPhoneCall(String Customer_Name, String Start_Date, String End_date);
 
-  String printOutput(String output_value);
 }

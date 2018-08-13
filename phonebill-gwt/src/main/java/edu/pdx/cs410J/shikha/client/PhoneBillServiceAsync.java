@@ -32,6 +32,4 @@ public interface PhoneBillServiceAsync {
    */
   void addNewPhoneCall(PhoneCall call, String Customer_Name, AsyncCallback<AbstractPhoneBill> async);
 
-  void printOutput(String output_value, AsyncCallback<String> async);
-
 }
