@@ -2,11 +2,9 @@ package edu.pdx.cs410J.shikha.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import edu.pdx.cs410J.AbstractPhoneBill;
-import edu.pdx.cs410J.shikha.client.PhoneBill;
-import edu.pdx.cs410J.shikha.client.PhoneCall;
-import edu.pdx.cs410J.shikha.client.PhoneBillService;
-import edu.pdx.cs410J.shikha.client.PrettyPrinter;
+import edu.pdx.cs410J.shikha.client.*;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,12 +24,28 @@ public class PhoneBillServiceImpl extends RemoteServiceServlet implements PhoneB
   @Override
   public AbstractPhoneBill addNewPhoneCall(PhoneCall call, String Customer_Name) {
       PhoneBill new_bill = new PhoneBill(Customer_Name);
-
+        PhoneCall call1 = new PhoneCall();
       if(bill.get(Customer_Name) == null) {
           new_bill.addPhoneCall(call);
           bill.put(Customer_Name,new_bill);
       } else {
-          bill.get(Customer_Name).addPhoneCall(call);
+          SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+
+          DateFormat dfm = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+          // below part returns date time in short format
+          try {
+              Date start_date = dfm.parse(sdf.format(call.getStartTime()).toLowerCase());
+
+              String formatted_start_time = DateFormat.getDateTimeInstance(
+                      DateFormat.SHORT, DateFormat.SHORT).format(start_date).toLowerCase();
+              Date end_date = dfm.parse(sdf.format(call.getEndTime()).toLowerCase());
+              String formatted_end_time = DateFormat.getDateTimeInstance(
+                      DateFormat.SHORT, DateFormat.SHORT).format(end_date).toLowerCase();
+              call1 = new PhoneCall(call.getCaller(),call.getCallee(),call.getStartTime(),call.getEndTime(),formatted_start_time,formatted_end_time);
+          } catch (ParseException e) {
+              e.printStackTrace();
+          }
+          bill.get(Customer_Name).addPhoneCall(call1);
       }
 
       return bill.get(Customer_Name);

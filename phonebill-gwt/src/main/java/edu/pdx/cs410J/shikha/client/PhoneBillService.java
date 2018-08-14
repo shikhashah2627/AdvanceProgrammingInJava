@@ -8,6 +8,7 @@ import edu.pdx.cs410J.AbstractPhoneBill;
  * A GWT remote service that returns a dummy Phone Bill
  */
 @RemoteServiceRelativePath("phoneBill")
+
 public interface PhoneBillService extends RemoteService{
 
   /**
@@ -27,4 +28,6 @@ public interface PhoneBillService extends RemoteService{
 
   AbstractPhoneBill searchPhoneCall(String Customer_Name, String Start_Date, String End_date);
 
+
 }
+

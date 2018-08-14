@@ -1,6 +1,7 @@
 package edu.pdx.cs410J.shikha.client;
 
 import edu.pdx.cs410J.AbstractPhoneCall;
+
 import java.util.Date;
 
 public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall> {
@@ -21,8 +22,16 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
         this.Callee_number = Callee_Number;
         this.Date_Start_Time = Start_Date_Time;
         this.Date_End_time = End_Date_Time;
+
         this.formatted_start_time = Start_Time_String;
         this.formatted_end_time = End_Time_String;
+    }
+
+    public PhoneCall(String Caller_Number, String Callee_Number, Date Start_Date_Time, Date End_Date_Time) {
+        this.Caller_number = Caller_Number;
+        this.Callee_number = Callee_Number;
+        this.Date_Start_Time = Start_Date_Time;
+        this.Date_End_time = End_Date_Time;
     }
 
   @Override
@@ -37,7 +46,8 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
 
   @Override
   public String getStartTimeString() {
-    return formatted_start_time;
+
+      return formatted_start_time;
   }
 
   @Override
