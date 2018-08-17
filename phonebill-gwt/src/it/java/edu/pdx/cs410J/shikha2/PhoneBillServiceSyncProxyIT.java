@@ -1,12 +1,6 @@
-package edu.pdx.cs410J.shikha;
+package edu.pdx.cs410J.shikha2;
 
-import com.gdevelop.gwt.syncrpc.SyncProxy;
-import edu.pdx.cs410J.shikha.client.PhoneBill;
-import edu.pdx.cs410J.shikha.client.PhoneBillService;
 import edu.pdx.cs410J.web.HttpRequestHelper;
-import org.junit.Test;
-
-import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
 

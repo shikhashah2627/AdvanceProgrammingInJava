@@ -1,4 +1,4 @@
-package edu.pdx.cs410J.shikha.client;
+package edu.pdx.cs410J.shikha2.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

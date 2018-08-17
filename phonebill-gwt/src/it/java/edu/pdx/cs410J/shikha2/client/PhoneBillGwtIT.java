@@ -1,14 +1,12 @@
-package edu.pdx.cs410J.shikha.client;
+package edu.pdx.cs410J.shikha2.client;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.DomEvent;
-import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Button;
-import org.junit.Ignore;
-import org.junit.Test;
+import edu.pdx.cs410J.shikha2.client.PhoneBillGwt;
 
 /**
  * An integration test for the PhoneBill GWT UI.  Remember that GWTTestCase is JUnit 3 style.
@@ -19,7 +17,7 @@ public class PhoneBillGwtIT extends GWTTestCase {
 
   @Override
   public String getModuleName() {
-    return "edu.pdx.cs410J.shikha.PhoneBillIntegrationTests";
+    return "edu.pdx.cs410J.shikha2.PhoneBillIntegrationTests";
  }
 //
 //  @Ignore

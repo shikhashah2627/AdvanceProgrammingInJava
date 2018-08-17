@@ -1,8 +1,8 @@
-package edu.pdx.cs410J.shikha.server;
+package edu.pdx.cs410J.shikha2.server;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
-import edu.pdx.cs410J.shikha.client.PhoneCall;
-import org.junit.Ignore;
+import edu.pdx.cs410J.shikha2.client.PhoneCall;
+import edu.pdx.cs410J.shikha2.server.PhoneBillServiceImpl;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

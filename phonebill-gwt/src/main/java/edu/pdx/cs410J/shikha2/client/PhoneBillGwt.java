@@ -1,4 +1,4 @@
-package edu.pdx.cs410J.shikha.client;
+package edu.pdx.cs410J.shikha2.client;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gwt.core.client.EntryPoint;
@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -35,6 +36,7 @@ public class PhoneBillGwt implements EntryPoint {
     private       String                    Number_pattern = "^\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d";
     private       String                    Name_pattern   = "([a-zA-Z0-9] ?)+[a-zA-Z0-9]";
     private       Label                     final_output = new Label();
+    private HTML HTML_Label = new HTML();
     public        String                    sb_appended_text_final = "";
 
     private final DeckPanel layoutPanel = new DeckPanel();
@@ -156,8 +158,8 @@ public class PhoneBillGwt implements EntryPoint {
     private void showReadmeValue() {
         logger.info("Showing README values");
         StringBuilder sb = new StringBuilder();
-        sb.append("This is all about the last Project 5 haivng GWT into it which provide the features like : Add Call and Search Call either with Customer Name or by providing" +
-                "Start Date and End Date.");
+        sb.append("This is all about the last Project 5 , Author : Shikha Shah, haivng GWT into it which provide the features like : Add Call and Search Call either with Customer Name or by providing " +
+                "Start Date and End Date." + "\n Calls can be added by clicking Add Menu Items and Search using Search Menu Item");
         alerter.alert(sb.toString());
     }
 
@@ -263,12 +265,14 @@ public class PhoneBillGwt implements EntryPoint {
                     showNewCall(call);
                     showOutputDeck();
                 } else {
-                    alerter.alert("Please insert the missing value.");
+                    alerter.alert("Please insert the missing value in the proper format.");
                 }
             }
         });
 
-        layout_form.add(final_output);
+        //layout_form.add(final_output);
+
+        layout_form.add(HTML_Label);
 
         return layout_form;
     }
@@ -297,6 +301,7 @@ public class PhoneBillGwt implements EntryPoint {
                 //alerter.alert("New Call Information added to existing bill of : " + call_list.size() + " \n" +  call.toString());
 
                 final_output.setText(sb_appended_text_final);
+                HTML_Label.setHTML(new SafeHtmlBuilder().appendEscapedLines(final_output.getText()).toSafeHtml());
             }
         });
     }
@@ -334,7 +339,13 @@ public class PhoneBillGwt implements EntryPoint {
 
         layout.add(new Label("Welcome to the output screen!"));
 
-        layout.add(final_output);
+       // HTML HTML_Label = new HTML(new SafeHtmlBuilder().appendEscapedLines(final_output.getText()).toSafeHtml());
+        HTML_Label.setHTML(new SafeHtmlBuilder().appendEscapedLines(final_output.getText()).toSafeHtml());
+
+        layout.add(HTML_Label);
+
+
+        //layout.add(final_output);
 
         Button Add_New_Call = new Button("Add one more call");
         Add_New_Call.addClickHandler(new ClickHandler() {
@@ -413,6 +424,7 @@ public class PhoneBillGwt implements EntryPoint {
                         search_End_Time = null;
                     } else if(Date_Search_Start_Time.compareTo(Date_Search_End_time) >= 0) {
                         alerter.alert("Your Start Date is greater than End Date.");
+                         search_End_Time = null;
                     } else {
                         search_End_Time = format.format(Date_Search_End_time).toLowerCase();
                     }
@@ -479,6 +491,7 @@ public class PhoneBillGwt implements EntryPoint {
                     }
                     //alerter.alert(sb.toString());
                     final_output.setText(sb.toString());
+                    HTML_Label.setHTML(new SafeHtmlBuilder().appendEscapedLines(final_output.getText()).toSafeHtml());
 
                 }
 
@@ -500,6 +513,7 @@ public class PhoneBillGwt implements EntryPoint {
                         PhoneBillGwt.this.Customer_Name = Customer_Name;
                     } else {
                         alerter.alert("Customer Name should not include any special characters.");
+                        Customer_Name = null;
                     }
 
             }

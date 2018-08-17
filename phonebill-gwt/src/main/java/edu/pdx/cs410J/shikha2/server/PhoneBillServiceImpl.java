@@ -1,8 +1,10 @@
-package edu.pdx.cs410J.shikha.server;
+package edu.pdx.cs410J.shikha2.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import edu.pdx.cs410J.AbstractPhoneBill;
-import edu.pdx.cs410J.shikha.client.*;
+import edu.pdx.cs410J.shikha2.client.PhoneBill;
+import edu.pdx.cs410J.shikha2.client.PhoneBillService;
+import edu.pdx.cs410J.shikha2.client.PhoneCall;
 
 import java.text.DateFormat;
 import java.text.ParseException;
